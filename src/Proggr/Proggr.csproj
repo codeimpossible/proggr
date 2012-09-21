@@ -122,10 +122,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="App_Data\Proggr.mdf" />
-    <Content Include="App_Data\Proggr_log.ldf">
-      <DependentUpon>Proggr.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\js\handlebars.js" />
     <Content Include="Content\js\showRepos.js" />
     <Content Include="Content\js\jquery.metro.js" />
@@ -156,7 +152,9 @@
     </Content>
     <Content Include="Views\Web.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
