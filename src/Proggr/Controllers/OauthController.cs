@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Proggr.Models;
+using Proggr.OAuth;
 using RestSharp;
 
 namespace Proggr.Controllers
@@ -56,7 +57,7 @@ namespace Proggr.Controllers
                     } );
                 }
 
-                FormsAuthentication.SetAuthCookie( profile.Login, true );
+                OpenAuthAuthenticationTicketHelper.SetAuthenticationTicket( HttpContext, profile.Login, true );
 
                 return RedirectToAction( "Details", new { controller = "Profiles", id = profile.Login } );
             }
