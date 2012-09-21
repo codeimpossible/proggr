@@ -39,6 +39,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppfailReporting">
+      <HintPath>..\packages\Appfail.WebForms.1.1.0\lib\35\AppfailReporting.dll</HintPath>
+    </Reference>
+    <Reference Include="AppfailReporting.Mvc">
+      <HintPath>..\packages\Appfail.Mvc.1.1.0\lib\35\AppfailReporting.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
