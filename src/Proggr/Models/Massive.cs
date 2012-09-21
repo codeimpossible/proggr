@@ -135,7 +135,7 @@ namespace Massive
     public class DynamicModel : DynamicObject
     {
         DbProviderFactory _factory;
-        string ConnectionString;
+        protected virtual string ConnectionString { get; set; }
         public static DynamicModel Open( string connectionStringName )
         {
             dynamic dm = new DynamicModel( connectionStringName );

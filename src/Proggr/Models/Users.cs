@@ -5,10 +5,9 @@ using System.Web;
 
 namespace Proggr.Models
 {
-    public class Users : Massive.DynamicModel
+    public class Users : ModelBase
     {
         public Users() 
-            : base( "Database" )
         {
             PrimaryKeyField = "id";
         }
