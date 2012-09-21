@@ -13,6 +13,8 @@ namespace Proggr
         {
             routes.IgnoreRoute( "{resource}.axd/{*pathInfo}" );
 
+            routes.IgnoreRoute( "static/{*path}" );
+
             routes.MapRoute(
                 name: "ProfileDetails",
                 url: "profiles/{id}",
