@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Web;
 using System.Web.Security;
+using Proggr.Models;
+using WebMatrix.WebData;
 
 namespace Proggr.OAuth
 {
     /// <summary>
     /// Helper methods for setting and retrieving a custom forms authentication ticket for delegation protocols.
     /// </summary>
-    public static class OpenAuthAuthenticationTicketHelper
+    public static class OAuthTicketHelper
     {
         /// <summary>
         /// The open auth cookie token.
@@ -16,64 +18,38 @@ namespace Proggr.OAuth
         private const string OpenAuthCookieToken = "OAuth";
 
 
-        /// <summary>
-        /// Checks whether the specified HTTP request comes from an authenticated user.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <returns>True if the reuest is authenticated; false otherwise.</returns>
-        public static bool IsValidAuthenticationTicket( HttpContextBase context )
+        public static void SetCookie( string data, string name, bool createPersistentCookie )
         {
-            HttpCookie cookie = context.Request.Cookies[ FormsAuthentication.FormsCookieName ];
-            if( cookie == null )
+            var ticketExpiration = DateTime.Now.AddMonths( 7 );
+            var ticket = new FormsAuthenticationTicket( 1, name, DateTime.Now, ticketExpiration, createPersistentCookie, data );
+            var cookie = new HttpCookie( name )
             {
-                return false;
-            }
+                Expires = ticketExpiration,
+                Value = FormsAuthentication.Encrypt( ticket ),
+                HttpOnly = true
+            };
 
-            string encryptedCookieData = cookie.Value;
-            if( string.IsNullOrEmpty( encryptedCookieData ) )
-            {
-                return false;
-            }
-
-            try
-            {
-                FormsAuthenticationTicket authTicket = FormsAuthentication.Decrypt( encryptedCookieData );
-                return authTicket != null && !authTicket.Expired && authTicket.Name == OpenAuthCookieToken;
-            }
-            catch( ArgumentException )
-            {
-                return false;
-            }
+            System.Web.HttpContext.Current.Response.Cookies.Add( cookie );
         }
 
-        /// <summary>
-        /// Adds an authentication cookie to the user agent in the next HTTP response.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <param name="userName">
-        /// The user name.
-        /// </param>
-        /// <param name="createPersistentCookie">
-        /// A value indicating whether the cookie should persist across sessions.
-        /// </param>
-        public static void SetAuthenticationTicket( HttpContextBase context, string userName, bool createPersistentCookie )
+
+        public static void SetUserCookie( WebsiteUser user, bool createPersistentCookie )
         {
-            if( !context.Request.IsSecureConnection && FormsAuthentication.RequireSSL )
+            string userFormat = "{0}|{1}|{2}";
+            if( GetUserFromCookie() != null )
             {
-                throw new HttpException( "Connection is not secure" );
+                System.Web.HttpContext.Current.Request.Cookies.Remove( OpenAuthCookieToken );
             }
 
-            HttpCookie cookie = GetAuthCookie( userName, createPersistentCookie );
-            context.Response.Cookies.Add( cookie );
+            SetCookie( String.Format( userFormat, user.Login, user.Name, user.AvatarUrl), OpenAuthCookieToken, true );
         }
 
-        public static string GetCurrentUsersLogin()
+
+        public static WebsiteUser GetUserFromCookie()
         {
             var cookie = System.Web.HttpContext.Current.Request.Cookies[ OpenAuthCookieToken ];
+            WebsiteUser returningUser = WebsiteUser.Guest;
+
             if( cookie != null )
             {
 
@@ -82,11 +58,23 @@ namespace Proggr.OAuth
 
                 if( ticket != null )
                 {
-                    return ticket.UserData;                    
+
+                    var ticketData = ticket.UserData.Split( '|' );
+
+                    if( ticketData.Length > 1 )
+                    {
+
+                        returningUser = new WebsiteUser()
+                        {
+                            Login = ticketData[ 0 ],
+                            Name = ticketData[ 1 ],
+                            AvatarUrl = ticketData[ 2 ]
+                        };
+                    }
                 }
             }
 
-            return null;
+            return returningUser;
         }
 
 
@@ -104,65 +92,27 @@ namespace Proggr.OAuth
             };
 
             System.Web.HttpContext.Current.Response.Cookies.Add( cookie );
+
+            HttpContext.Current.User = null;
+
+            System.Threading.Thread.CurrentPrincipal = null;
         }
 
-        /// <summary>
-        /// Creates an HTTP authentication cookie.
-        /// </summary>
-        /// <param name="userName">
-        /// The user name.
-        /// </param>
-        /// <param name="createPersistentCookie">
-        /// A value indicating whether the cookie should last across sessions.
-        /// </param>
-        /// <returns>An authentication cookie.</returns>
-        private static HttpCookie GetAuthCookie( string userName, bool createPersistentCookie )
+
+        public static void SetAuthCookie( WebsiteUser user, bool createPersistentCookie )
         {
-            if( String.IsNullOrWhiteSpace( userName ) )
-            {
-                throw new ArgumentException( "userName" );
-            }
+            FormsAuthentication.SetAuthCookie( user.Login, createPersistentCookie );
 
-            var ticket = new FormsAuthenticationTicket(
-                /* version */
-                2,
-                OpenAuthCookieToken,
-                DateTime.Now,
-                DateTime.Now.Add( FormsAuthentication.Timeout ),
-                createPersistentCookie,
-                userName,
-                FormsAuthentication.FormsCookiePath );
-
-            string encryptedTicket = FormsAuthentication.Encrypt( ticket );
-            if( encryptedTicket == null || encryptedTicket.Length < 1 )
+            var securityUser = new SecurityUser
             {
-                throw new HttpException( "Failed to encrypt ticket" );
-            }
-
-            var cookie = new HttpCookie( FormsAuthentication.FormsCookieName, encryptedTicket )
-            {
-                HttpOnly = true,
-                Path = FormsAuthentication.FormsCookiePath
+                Login = user.Login,
+                AvatarUrl = user.AvatarUrl,
+                Name = user.Name
             };
 
-            // only set Secure if FormsAuthentication requires SSL. 
-            // otherwise, leave it to default value
-            if( FormsAuthentication.RequireSSL )
-            {
-                cookie.Secure = true;
-            }
+            HttpContext.Current.User = securityUser;
 
-            if( FormsAuthentication.CookieDomain != null )
-            {
-                cookie.Domain = FormsAuthentication.CookieDomain;
-            }
-
-            if( ticket.IsPersistent )
-            {
-                cookie.Expires = ticket.Expiration;
-            }
-
-            return cookie;
+            System.Threading.Thread.CurrentPrincipal = securityUser;
         }
     }
 }

@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Proggr.Models;
+using Proggr.OAuth;
 
 namespace Proggr
 {
@@ -21,5 +23,21 @@ namespace Proggr
             FilterConfig.RegisterGlobalFilters( GlobalFilters.Filters );
             RouteConfig.RegisterRoutes( RouteTable.Routes );
         }
+
+        protected void Application_OnAuthenticateRequest()
+        {
+            var currentUser = HttpContext.Current.User;
+
+            if( currentUser == null || !currentUser.Identity.IsAuthenticated )
+            {
+                var user = OAuthTicketHelper.GetUserFromCookie();
+
+                if( user != null )
+                {
+                    OAuthTicketHelper.SetAuthCookie( user, true );
+                }
+            }
+        }
+
     }
 }

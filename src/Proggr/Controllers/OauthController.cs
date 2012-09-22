@@ -57,7 +57,16 @@ namespace Proggr.Controllers
                     } );
                 }
 
-                OpenAuthAuthenticationTicketHelper.SetAuthenticationTicket( HttpContext, profile.Login, true );
+                // set the user into the Thread Security
+                var securityUser = new WebsiteUser()
+                {
+                    Login = profile.Login,
+                    AvatarUrl = profile.AvatarUrl,
+                    Name = profile.Name
+                };
+
+                OAuthTicketHelper.SetUserCookie( securityUser, true );
+                OAuthTicketHelper.SetAuthCookie( securityUser, true );
 
                 return RedirectToAction( "Details", new { controller = "Profiles", id = profile.Login } );
             }

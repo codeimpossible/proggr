@@ -5,8 +5,8 @@
         @if( !Request.IsAuthenticated ) {
             <p><a href="https://github.com/login/oauth/authorize?client_id=@ViewBag.client_id" class="btn btn-primary btn-large">Sign in with Github</a></p>
         } else {
-            var username = Proggr.OAuth.OpenAuthAuthenticationTicketHelper.GetCurrentUsersLogin();
-            <p><a href="/profiles/@username" class="btn btn-primary btn-large">View your profile</a></p>
+            var user = Proggr.OAuth.OAuthTicketHelper.GetUserFromCookie();
+            <p><a href="/profiles/@user.Login" class="btn btn-primary btn-large">View your profile</a></p>
         }
         <ul class="masthead-links">
             <li><a href="http://github.com/codeimpossible/proggr">View the source for this on Github</a></li>
