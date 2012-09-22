@@ -1,10 +1,13 @@
 ﻿@if( Request.IsAuthenticated ) {
     <ul class="nav pull-right">
-        <li class="dropdown">
+        <li class="dropdown" style="width: 145px;">
             @{ var user = Proggr.OAuth.OAuthTicketHelper.GetUserFromCookie(); }
+            <img src="@user.AvatarUrl&s=16" style="float:left; padding-top: 13px; padding-right: 7px;" />
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">@user.Login <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="/profiles/@user.Login">My Profile</a></li>
+                <li>
+                    <a href="/profiles/@user.Login">My Profile</a>
+                </li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li class="divider"></li>
