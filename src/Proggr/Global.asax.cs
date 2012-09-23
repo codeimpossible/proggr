@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Proggr.Models;
 using Proggr.OAuth;
+using StackExchange.Profiling;
 
 namespace Proggr
 {
@@ -22,6 +23,14 @@ namespace Proggr
             WebApiConfig.Register( GlobalConfiguration.Configuration );
             FilterConfig.RegisterGlobalFilters( GlobalFilters.Filters );
             RouteConfig.RegisterRoutes( RouteTable.Routes );
+        }
+
+        protected void Application_BeginRequest()
+        {
+            if (Request.IsLocal)
+            {
+                MiniProfiler.Start();
+            } 
         }
 
         protected void Application_OnAuthenticateRequest()

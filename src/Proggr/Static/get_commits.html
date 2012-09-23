@@ -1,124 +1,129 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset=utf-8 />
+<head>
+    <meta charset="utf-8" />
     <title>JS Bin</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <label style="font-size: 32px;">Enter user/repo:</label>
-    <input type="text" id="repo" value="codeimpossible/gitconfig" style="font-size: 32px;"/>
+    <input type="text" id="repo" value="codeimpossible/gitconfig" style="font-size: 32px;" />
     <button rel='get_commits' style="font-size: 32px;">Fetch Commits</button>
 
     <hr />
 
+    <pre id="log"></pre>
+
     <table cellpadding="2" cellspacing="2">
-      <thead>
-        <tr>
-          <th>SHA</th>
-          <th>Committer</th>
-          <th>Message</th>
-        </tr>
-      </thead>
-      <tbody id="commits"></tbody>
+        <thead>
+            <tr>
+                <th>SHA</th>
+                <th>Committer</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody id="commits"></tbody>
     </table>
 
     <script src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
     <script type='text/javascript'>
-      (function($, global, undefined) {
+        (function ($, global, undefined) {
 
-        var GithubController = function() {
-          var api_url = "https://api.github.com/";
+            var GithubController = function () {
+                var api_url = "https://api.github.com/";
 
-          var parseDataObjectToQueryString = function(data) {
-            var q = "";
-            if(data){
-              for(var p in data) {
-                if( data.hasOwnProperty(p) ) {
-                  q += "&" + p + "=" + data[p];
-                }
-              }
-            }
-            return q;
-          };
-
-          var isArray = function(o) { return o.constructor === Array; };
-
-          var noop = function(){};
-
-          var format_url = function (method, data) {
-            var prefix = api_url, suffix = "";
-            return (prefix + method + suffix + parseDataObjectToQueryString(data));
-          };
-
-          this.on = function( parent ) {
-            var base_url = format_url( "repos/" + parent, {} );
-            return {
-              commits: [],
-              get_commits : function(opts) {
-                var parent = this;
-                var on_done = opts ? opts.success || noop : noop;
-
-                function work( page_url ) {
-                  var w = work, url = page_url || (base_url + "/commits");
-                  $.getJSON( url, function( commits, text, xhr ) {
-                    parent.commits = parent.commits.concat(commits);
-                    var link_header = xhr.getResponseHeader('Link');
-                    var next_page_url = (link_header||'').split(',')[0].split(';')[0];
-
-                    if( next_page_url && link_header.indexOf('next') > -1 ) {
-                      // there are more pages, GET THEM
-                      // reformat the next_page_url
-                      next_page_url = next_page_url.substring(1, next_page_url.length - 1);
-                      setTimeout(function(){
-                        console.log('fetching page: ' + next_page_url);
-                        w(next_page_url);
-                      }, 1000);
-                    } else {
-                      on_done();
+                var parseDataObjectToQueryString = function (data) {
+                    var q = "";
+                    if (data) {
+                        for (var p in data) {
+                            if (data.hasOwnProperty(p)) {
+                                q += "&" + p + "=" + data[p];
+                            }
+                        }
                     }
-                  });
-                }
+                    return q;
+                };
 
-                // kick it off
-                work();
-              }
+                var isArray = function (o) { return o.constructor === Array; };
+
+                var noop = function () { };
+
+                var format_url = function (method, data) {
+                    var prefix = api_url, suffix = "";
+                    return (prefix + method + suffix + parseDataObjectToQueryString(data));
+                };
+
+                this.on = function (parent) {
+                    var base_url = format_url("repos/" + parent, {});
+                    return {
+                        commits: [],
+                        get_commits: function (opts) {
+                            var parent = this;
+                            var on_done = opts ? opts.success || noop : noop;
+
+                            function work(page_url) {
+                                var w = work, url = page_url || (base_url + "/commits");
+                                $.getJSON(url, function (commits, text, xhr) {
+                                    parent.commits = parent.commits.concat(commits);
+                                    var link_header = xhr.getResponseHeader('Link');
+                                    var next_page_url = (link_header || '').split(',')[0].split(';')[0];
+
+                                    if (next_page_url && link_header.indexOf('next') > -1) {
+                                        // there are more pages, GET THEM
+                                        // reformat the next_page_url
+                                        next_page_url = next_page_url.substring(1, next_page_url.length - 1);
+                                        setTimeout(function () {
+                                            console.log('fetching page: ' + next_page_url);
+                                            w(next_page_url);
+                                        }, 1000);
+                                    } else {
+                                        on_done({ start_time: parent.commits_start });
+                                    }
+                                });
+                            }
+
+                            // kick it off
+                            parent.commits_start = (new Date).getTime();
+                            work();
+                        }
+                    };
+                };
             };
-          };
-        };
 
 
 
-        $('button[rel="get_commits"]').click(function() {
-          var repo = $('#repo').val();
-          var controller = new GithubController().on( repo );
+            $('button[rel="get_commits"]').click(function () {
+                var repo = $('#repo').val();
+                var controller = new GithubController().on(repo);
 
-          controller.get_commits({
-            success: function() {
-              console.log("SUCCESS");
-              var $commits = $('#commits'),
-                  commits = controller.commits,
-                  html = '';
-              console.log(commits);
-              for(var i = -1, l = commits.length; ++i < l;) {
-                var commit = commits[i];
-                console.log(commit);
+                controller.get_commits({
+                    success: function (meta) {
+                        console.log("SUCCESS");
+                        var diff = (new Date).getTime() - meta.start_time;
+                        $('#log').html('took: ' + diff + 'ms');
 
-                var committer = commit.committer ? commit.committer.login : 'not available';
-                var msg = commit.commit.message.length > 80 ? commit.commit.message.substring(0, 77) + "..." : commit.commit.message;
+                        var $commits = $('#commits'),
+                            commits = controller.commits,
+                            html = '';
+                        console.log(commits);
+                        for (var i = -1, l = commits.length; ++i < l;) {
+                            var commit = commits[i];
+                            console.log(commit);
 
-                html += "<tr><td>" + commit.sha + "</td><td>" + committer + "</td><td>" + msg + "</td></tr>";
-              }
+                            var committer = commit.committer ? commit.committer.login : 'not available';
+                            var msg = commit.commit.message.length > 80 ? commit.commit.message.substring(0, 77) + "..." : commit.commit.message;
 
-              $commits.html(html);
-            }
-          });
-        });
+                            html += "<tr><td>" + commit.sha + "</td><td>" + committer + "</td><td>" + msg + "</td></tr>";
+                        }
 
-      })(jQuery, window);
+                        $commits.html(html);
+                    }
+                });
+            });
+
+        })(jQuery, window);
 
     </script>
 
-  </body>
+</body>
 </html>

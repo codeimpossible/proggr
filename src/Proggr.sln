@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proggr", "Proggr\Proggr.csproj", "{99A4EE27-3AB6-4084-8917-A0680B23CCF1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{791E680C-A17B-417F-894A-C2601FFFADBE}"
+	ProjectSection(SolutionItems) = preProject
+		..\data\Proggr.sql = ..\data\Proggr.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
