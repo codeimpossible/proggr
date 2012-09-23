@@ -48,21 +48,7 @@
                         <a href="/Home/About">What Is This?</a>
                         </li>
                     </ul>
-                    @if( Request.IsAuthenticated ) {
-                        <ul class="nav pull-right">
-                            <li class="dropdown">
-                                @{ var user = Proggr.OAuth.OAuthTicketHelper.GetUserFromCookie(); }
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@user.Login <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/profiles/@user.Login">My Profile</a></li>
-                                    <li><a href="#">Another action</a></li>
-                                    <li><a href="#">Something else here</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="/account/logoff">Log Out</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    }
+                    @{ Html.RenderPartial("_LoggedInMenu"); }
                 </div>
             </div>
             </div>

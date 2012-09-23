@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -27,7 +28,9 @@ namespace Proggr
 
         protected void Application_BeginRequest()
         {
-            if (Request.IsLocal)
+            var user = OAuthTicketHelper.GetUserFromCookie();
+            var admin_users = ConfigurationManager.AppSettings["admin_users"];
+            if (Request.IsLocal || admin_users.Contains( user.Login ) )
             {
                 MiniProfiler.Start();
             } 
@@ -48,5 +51,10 @@ namespace Proggr
             }
         }
 
+
+        protected void Application_EndRequest()
+        {
+            MiniProfiler.Stop();
+        }
     }
 }
