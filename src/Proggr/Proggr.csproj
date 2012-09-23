@@ -139,10 +139,14 @@
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Filters\MustBeAdminUserAttribute.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OauthController.cs" />
     <Compile Include="Controllers\ProfilesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\Responses\Http403Response.cs" />
+    <Compile Include="Controllers\Responses\JsonResponse.cs" />
+    <Compile Include="Controllers\WorkersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -150,6 +154,7 @@
     <Compile Include="Models\ModelBase.cs" />
     <Compile Include="Models\Projects.cs" />
     <Compile Include="Models\Users.cs" />
+    <Compile Include="Models\Workers.cs" />
     <Compile Include="OAuth\GithubClient.cs" />
     <Compile Include="OAuth\OpenAuthenticationTicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -220,6 +225,8 @@
     <Content Include="Views\Shared\_LoggedInMenu.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Workers\Index.cshtml" />
+    <Content Include="Views\Workers\Run.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
