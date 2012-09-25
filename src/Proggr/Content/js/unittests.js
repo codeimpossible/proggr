@@ -84,8 +84,9 @@
         }
     };
 
-    worker.tasks.registerTask("running unit tests", {
-        tests:{
+    worker.tasks.registerTask({
+        name: "Running unit tests",
+        tests: {
             "registering a task adds it to the task list": function () {
                 var testWorker = new Worker();
                 testWorker.tasks.registerTask("test task", {});
@@ -106,10 +107,12 @@
             var testsToRun = [];
 
             for (var key in this.tests) {
-                if (obj.hasOwnProperty(key)) {
-                    testsToRun.push({ name: key, fn: obj[key] });
+                if (this.tests.hasOwnProperty(key)) {
+                    testsToRun.push({ name: key, fn: this.tests[key] });
                 }
             }
+
+            console.log(testsToRun);
 
             workerHandler.progress.maxSteps = testsToRun.length;
 

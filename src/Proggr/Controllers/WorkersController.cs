@@ -21,7 +21,7 @@ namespace Proggr.Controllers
             return View();
         }
 
-        [Authorize]
+        [MustBeLoggedIn]
         public ActionResult Run()
         {
             // TODO: check for the workerid for the current user
@@ -31,7 +31,7 @@ namespace Proggr.Controllers
             // TODO: if no worker exists, create one
             if( worker == null )
             {
-                worker = _workersTable.Insert( new { user_id = current_user.id } );
+                worker = _workersTable.Insert( new { user_id = current_user.id, last_report = DateTime.Now.ToUniversalTime() } );
             }
 
             // TODO: render the worker view, with the worker model

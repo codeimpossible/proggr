@@ -7,13 +7,14 @@ using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
+using Proggr.Controllers.Filters;
 using Proggr.Models;
 using Proggr.OAuth;
 using WebMatrix.WebData;
 
 namespace Proggr.Controllers
 {
-    [Authorize]
+    [MustBeLoggedIn]
     public class AccountController : Controller
     {
 

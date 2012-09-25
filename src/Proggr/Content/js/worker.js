@@ -10,12 +10,28 @@
         // TODO: resize the progress using the new value for percent
     });
 
+    var sleepingTask = {
+        name: "Sleeping",
+        work: function (handler) {
+            var parent = this;
+            handler.progress.maxSteps = 10;
+            var currentStep = 1;
+            setTimeout(function () {
+                currentStep++;
+                handler.progress.stepCompleted(currentStep);
+                if (currentStep < handler.progress.maxSteps) {
+                    parent.work(handler);
+                }
+            }, 3000);
+        }
+    };
+
     return function() {
         return {
             tasks: {
                 list: [],
-                registerTask: function (name, task) {
-                    this.list.push({ name: name, task: task });
+                registerTask: function (task) {
+                    this.list.push(task);
                 },
                 next: function () {
                     return this.list.shift();
@@ -25,11 +41,16 @@
                 el: $history,
                 add: function (message) {
                     this.el.append($("<li />", { text: message }));
+
+                    $('#currentTask').html(message);
                 }
             },
             progress: {
                 el: $progress,
                 maxSteps: 0,
+                reset: function () {
+                    this.el.width(0);
+                },
                 stepCompleted: function ( step ) {
                     this.el.width(percentage * step);
                 }
@@ -38,19 +59,20 @@
                 var task = this.tasks.next();
                 if (task) {
                     var what = task.name;
-                    var work = task.work;
                     var parent = this;
 
+                    console.log(task);
+
                     // set progress on current task to 0
-                    progress.report(0);
+                    parent.progress.reset();
 
                     // set the current task desc into history
-                    history.append($("<li />", { text: what }));
+                    parent.history.add(what);
 
                     // start the task
-                    work(this);
+                    task.work(this);
 
-                    history.append($("<li />", { text: "Sleeping" }));
+                    parent.history.add("Sleeping");
                 }
                 // when the task is done, wait and start again
                 setTimeout(function () {
@@ -58,7 +80,7 @@
                 }, 1000);
             },
             start: function () {
-                this.work($progress, $history);
+                this.work();
             }
         };
     };
