@@ -1,4 +1,13 @@
 ﻿/*
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+proggr client-side worker library
+(c) Jared Barboza, 2012
+Manages and executes a queue of tasks in a client web browser.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+## Basic workflow for a Worker
 * Start Worker
   * Worker checks task list
     * if no tasks, check with server
@@ -10,16 +19,20 @@
         * if fail, the work will stop for the current task and it will be pushed into the failed tasks list to be retried when there is nothing to do.
 */
 
-var Task = (function ($, global, undefined) {
-    return function Task(name, fn) {
-        this.makeTask = function( name, fn ) {
-            var task = fn;
-            task.name = name;
-            return task;
-        };
-    };
-})(jQuery, window);
+// Task: a task to run within the worker.
+// @name = the friendly name of the task, will be shown in the UI
+// @fn = the actual work to be performed when the task is executed
+var Task = {
+    makeTask: function (name, fn) {
+        fn.title = name;
+        return fn;
+    }
+};
 
+// Worker: represents a client-side worker drone
+// @$ = scoped reference to jQuery
+// @global = scoped reference to window
+// @undefined = scoped reference to undefined
 var Worker = (function ($, global, undefined) {
     var percentage = 0;
 
@@ -29,59 +42,95 @@ var Worker = (function ($, global, undefined) {
         // TODO: resize the progress using the new value for percent
     });
 
-    var queue = new (function(){
-        var _q = [];
-
-        this.push = function(task) {
-            _q.push(task);
-        };
-
-        this.next = function() {
-            _q.shift();
-        };
-
-        this.peek = function() {
-            return _q[0] || undefined;
-        }
-    })();
-
     var ux = new (function () {
         this.setCurrentTask = function (task) {
-            $('#currentTask').html(task.name);
+            $('#currentTask').html(task.title);
         };
     })();
 
-    // return the constructor
-    return function Worker() {
+    // return the _real_ constructor
+    // @worker_id = the GUID that represents this worker in proggr, used to authenticate a worker against the server
+    // @_ux = a reference to a UX object. if null or undefined then the ux var above will be substituted. This is really only used by our unit tests.
+    return function Worker(worker_id, _ux) {
+        var id = worker_id, worker_ux = _ux || ux;
+
+        // each worker should have its own queue
+        var queue = new (function (undefined) {
+            var _q = [], _size = 0;
+
+            this.push = function (task) {
+                _q.push(task);
+                _size++;
+                return task;
+            };
+
+            this.next = function () {
+                _size--;
+                return _q.shift();
+            };
+
+            this.peek = function () {
+                return _q[0] || undefined;
+            };
+
+            this.getLength = function () {
+                return _size;
+            };
+        })();
+
+        var log = function () {
+            if (console && console.log) console.log.call(console, arguments);
+        };
+
         return {
             failed_tasks: [],
             enqueue: function( task ) {
                 queue.push(task);
             },
-            
+
+            queueSize: function() {
+                return queue.getLength();
+            },
+
             // loops through
-            loop: function() {
-                var work = function () {
-                    var task = queue.next();
+            nextTask: function () {
+                var parent = this;
+                if (!queue.peek()) {
+                    // TODO: get another task for us to run
 
-                    ux.setCurrentTask(task);
+                    // wait 10 seconds and then check the tasks list
+                    worker_ux.setCurrentTask("No work, sleeping...");
+                    setTimeout(parent.nextTask, 10 * 1000);
+                    return;
+                }
 
+                var task = queue.next();
+
+                worker_ux.setCurrentTask(task);
+
+                setTimeout(function runner() {
                     if (task(ux)) {
-                        this.taskCompleted(task);
+                        parent.taskCompleted(task);
                     } else {
-                        this.taskFailed(task);
+                        parent.taskFailed(task);
                     }
-                };
+                }, 500);
+
+                return task;
             },
 
-            taskCompleted: function(task) {
-
+            taskCompleted: function (task) {
+                // TODO: add the task to the history...
+                this.nextTask();
             },
 
-            taskFailed: function(task) {
-                failed_tasks.push(task);
-
+            taskFailed: function (task) {
+                this.failed_tasks.push(task);
+                // TODO: add the task to the history...?
                 // TODO: add code to show failed tasks?
+
+                // launch the next task
+                this.nextTask();
             }
         };
     };

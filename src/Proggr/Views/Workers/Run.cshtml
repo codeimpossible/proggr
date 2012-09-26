@@ -25,14 +25,16 @@
 <div id="progress" style="position: fixed; bottom: 0; left: 0; height: 32px; width: 100px; display: block;" class="purplebg"></div>
 
 @section JavaScript {
-    <script type="text/javascript" src="~/Content/js/queue.js"></script>
-    <script type="text/javascript" src="~/Content/js/worker.js"></script>
-    <script type="text/javascript" src="~/Content/js/unittests.js"></script>
+    <script type="text/javascript" src="~/Content/js/workHandler.js"></script>
+    <script type="text/javascript" src="~/Content/js/tests.js"></script>
+    <script type="text/javascript" src="~/Content/js/testruntask.js"></script>
     <script type="text/javascript">
-        (function ($, workerDrone) {
+        (function ($) {
             $(function () {
-                worker.start();
+                var worker = new Worker("@Model.id");
+                worker.enqueue(TestRunTask);
+                worker.nextTask();
             });
-        })(jQuery, worker);
+        })(jQuery);
     </script>
 }

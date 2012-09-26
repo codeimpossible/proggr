@@ -165,13 +165,12 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Content\js\handlebars.js" />
-    <Content Include="Content\js\queue.js" />
-    <Content Include="Content\js\require.js" />
     <Content Include="Content\js\showRepos.js" />
     <Content Include="Content\js\jquery.metro.js" />
+    <Content Include="Content\js\testruntask.js" />
     <Content Include="Content\js\tilt.js" />
-    <Content Include="Content\js\worker.js" />
-    <Content Include="Content\js\unittests.js" />
+    <Content Include="Content\js\tests.js" />
+    <Content Include="Content\js\workhandler.js" />
     <Content Include="Content\style\bootstrap\css\bootstrap-responsive.css" />
     <Content Include="Content\style\bootstrap\css\bootstrap-responsive.min.css" />
     <Content Include="Content\style\bootstrap\css\bootstrap.css" />
