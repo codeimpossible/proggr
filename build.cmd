@@ -14,5 +14,5 @@ del /S /Q "%%f\obj\*"
 
 :: find all test files and run them
 for /R %%F in (*Tests.dll) do (
-.\tools\xunit\xunit.console.clr4.exe %%F
+.\src\packages\xunit.runners.1.9.1\tools\xunit.console.clr4.exe %%F
 )

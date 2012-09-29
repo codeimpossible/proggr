@@ -4,14 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Proggr.Models;
+using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class ProfilesController : Controller
+    public class ProfilesController : DataControllerBase
     {
-
-        private Users _usersTable = new Users();
-
         public ActionResult Index()
         {
             return View();
@@ -19,7 +17,10 @@ namespace Proggr.Controllers
 
         public ActionResult Details( string id )
         {
-            var user = _usersTable.Single( where: "login = @0", args: id );
+
+            var db = OpenDatabaseConnection();
+
+            var user = db.Users.Find( db.Users.login == id );
 
             if( user == null )
             {

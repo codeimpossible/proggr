@@ -5,14 +5,6 @@ using System.Web;
 
 namespace Proggr.Models
 {
-    public class Users : ModelBase
-    {
-        public Users() 
-        {
-            PrimaryKeyField = "id";
-        }
-    }
-
     public class WebsiteUser
     {
         public static readonly WebsiteUser Guest = new WebsiteUser { Login = "Guest", AvatarUrl = "", Name = "Guest" };

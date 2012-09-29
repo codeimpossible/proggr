@@ -8,6 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{791E680C-A
 		..\data\Proggr.sql = ..\data\Proggr.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proggr.Tests", "Proggr.Tests\Proggr.Tests.csproj", "{582B6BE4-5081-45FC-B8EC-E4BC5D154236}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{F0195FBC-7D3A-45CA-9E02-5059E4310782}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +25,10 @@ Global
 		{99A4EE27-3AB6-4084-8917-A0680B23CCF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A4EE27-3AB6-4084-8917-A0680B23CCF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A4EE27-3AB6-4084-8917-A0680B23CCF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{582B6BE4-5081-45FC-B8EC-E4BC5D154236}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{582B6BE4-5081-45FC-B8EC-E4BC5D154236}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{582B6BE4-5081-45FC-B8EC-E4BC5D154236}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{582B6BE4-5081-45FC-B8EC-E4BC5D154236}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

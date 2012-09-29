@@ -16,9 +16,6 @@ namespace Proggr.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-
-        private Users _usersTable = new Users();
-
         [HttpGet]
         public ActionResult LogOff()
         {

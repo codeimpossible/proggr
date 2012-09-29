@@ -4,18 +4,18 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Proggr.Models;
+using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class ProjectsController : Controller
+    public class ProjectsController : DataControllerBase
     {
-
-        private Projects _projectsTable = new Projects();
-
         [HttpPost]
         public JsonResult Create( NewProject newProject )
         {
-            _projectsTable.Insert( newProject );
+            var db = OpenDatabaseConnection();
+
+            db.Projects.Insert( newProject );
 
             return Json( new { Status = 200, Message = "Project Added Successfully!" } );
         }
