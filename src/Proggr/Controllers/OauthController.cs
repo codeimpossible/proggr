@@ -8,13 +8,12 @@ using System.Web.Security;
 using Proggr.Models;
 using Proggr.OAuth;
 using RestSharp;
+using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class OauthController : Controller
+    public class OauthController : DataControllerBase
     {
-        private Users _usersTable = new Users();
-
         /// <summary>
         /// Github OAuth Callback
         /// </summary>
@@ -37,6 +36,9 @@ namespace Proggr.Controllers
             if( response.StatusCode == System.Net.HttpStatusCode.OK )
             {
                 // we're in...
+
+                var db = OpenDatabaseConnection();
+
                 var apiClient = new RestClient( "https://api.github.com" );
                 var apiRequest = new RestRequest( "/user?access_token=" + response.Data.AccessToken, Method.GET );
 
@@ -45,11 +47,11 @@ namespace Proggr.Controllers
                 var profile = apiResponse.Data;
 
                 // does the user already exist in the db?
-                var users = _usersTable.All( where: "login = '@0'", args: profile.Login );
+                var users = db.Users.Find( db.Users.login == profile.Login );
                 if( users.Count() == 0 )
                 {
                     // insert this into the DB
-                    _usersTable.Insert( new
+                    db.Users.Insert( new
                     {
                         login = profile.Login,
                         avatar_url = profile.AvatarUrl,

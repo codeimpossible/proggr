@@ -5,20 +5,20 @@ using System.Web;
 using System.Web.Mvc;
 using Proggr.Controllers.Responses;
 using Proggr.Models;
+using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class ProjectsController : Controller
+    public class ProjectsController : DataControllerBase
     {
-
-        private Projects _projectsTable = new Projects();
-
         [HttpPost]
         public JsonResult Create( NewProject newProject, Guid workerid )
         {
             // TODO: validate worker guid
 
-            _projectsTable.Insert( newProject );
+            var db = OpenDatabaseConnection();
+
+            db.Projects.Insert( newProject );
 
             return new JsonResponse( 200, new { Message = "Project Added Successfully!" } );
         }

@@ -17,9 +17,6 @@ namespace Proggr.Controllers
     [MustBeLoggedIn]
     public class AccountController : Controller
     {
-
-        private Users _usersTable = new Users();
-
         [HttpGet]
         public ActionResult LogOff()
         {
