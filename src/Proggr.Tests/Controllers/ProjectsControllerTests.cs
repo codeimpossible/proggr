@@ -32,8 +32,8 @@ namespace Proggr.Tests.Controllers
 
             dynamic jsonData = result.Data;
 
-            Assert.Equal( 200, (int)jsonData.Status );
-            Assert.Equal( "Project Added Successfully!", (string)jsonData.Message );
+            Assert.Equal( 200, (int)jsonData.Meta.Status );
+            Assert.Equal( "Project Added Successfully!", (string)jsonData.Data.Message );
         }
 
         [Fact]

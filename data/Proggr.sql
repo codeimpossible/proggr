@@ -12,16 +12,17 @@ GO
 CREATE INDEX [IX_Users_login] ON [dbo].[Users] ([login])
 
 
-CREATE TABLE [dbo].[Repositories]
+CREATE TABLE [dbo].[Projects]
 (
 	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[name] NVARCHAR(100) NOT NULL,
 	[url] NVARCHAR(500) NOT NULL,
 	[created_at] DATETIME NOT NULL DEFAULT( getdate() ),
-	[user_id] INT NOT NULL FOREIGN KEY REFERENCES Users(id)
+	[user_id] INT NOT NULL FOREIGN KEY REFERENCES Users(id),
+	[primary_language_id] INT NULL FOREIGN KEY REFERENCES Languages(id)
 )
 
-CREATE INDEX [IX_Repositories_name] ON [dbo].[Users] ([name])
+CREATE INDEX [IX_Projects_name] ON [dbo].[Users] ([name])
 
 CREATE TABLE [dbo].[Workers]
 (

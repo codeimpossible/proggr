@@ -153,6 +153,7 @@
     <Compile Include="Controllers\Filters\MustBeLoggedInAttribute.cs" />
     <Compile Include="Controllers\DataControllerBase.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobsController.cs" />
     <Compile Include="Controllers\OauthController.cs" />
     <Compile Include="Controllers\ProfilesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -163,7 +164,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Users.cs" />
-    <Compile Include="Models\Workers.cs" />
     <Compile Include="OAuth\OAuthTicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

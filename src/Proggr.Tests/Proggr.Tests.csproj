@@ -91,6 +91,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\JobsControllerTests.cs" />
     <Compile Include="Controllers\ProfilesControllerTests.cs" />
     <Compile Include="Controllers\ProjectsControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

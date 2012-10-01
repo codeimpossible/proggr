@@ -9,10 +9,8 @@ using Proggr.Models;
 
 namespace Proggr.Controllers
 {
-    public class WorkersController : Controller
+    public class WorkersController : DataControllerBase
     {
-        private Workers _workersTable = new Workers();
-        private Users _usersTable = new Users();
 
         [MustBeAdminUser]
         public ActionResult Index()
@@ -25,13 +23,15 @@ namespace Proggr.Controllers
         public ActionResult Run()
         {
             // TODO: check for the workerid for the current user
-            var current_user = _usersTable.Single( where: "login = @0", args: User.Identity.Name );
-            var worker = _workersTable.Single( where: "user_id = " + current_user.id );
+            var db = OpenDatabaseConnection();
+
+            var current_user = db.Users.Find( db.Users.login == User.Identity.Name );
+            var worker = db.Workers.Find( db.Workers.user_id == current_user.id );
 
             // TODO: if no worker exists, create one
             if( worker == null )
             {
-                worker = _workersTable.Insert( new { user_id = current_user.id, last_report = DateTime.Now.ToUniversalTime() } );
+                worker = db.Workers.Insert( new { user_id = current_user.id, last_report = DateTime.Now.ToUniversalTime() } );
             }
 
             // TODO: render the worker view, with the worker model

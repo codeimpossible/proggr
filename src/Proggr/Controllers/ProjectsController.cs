@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Proggr.Controllers.Filters;
 using Proggr.Controllers.Responses;
 using Proggr.Models;
 using Simple.Data;
@@ -12,7 +13,8 @@ namespace Proggr.Controllers
     public class ProjectsController : DataControllerBase
     {
         [HttpPost]
-        public JsonResult Create( NewProject newProject, Guid workerid )
+        [MustBeLoggedIn]
+        public JsonResult Create( NewProject newProject )
         {
             // TODO: validate worker guid
 
@@ -21,22 +23,6 @@ namespace Proggr.Controllers
             db.Projects.Insert( newProject );
 
             return new JsonResponse( 200, new { Message = "Project Added Successfully!" } );
-        }
-
-        [HttpPost]
-        public JsonResult Details( ProjectLookup projectLookup, Guid workerid )
-        {
-            // TODO: validate worker guid
-
-            var project = _projectsTable.Query(
-                            @"
-                            SELECT TOP 1 P.*
-                            FROM projects P
-                            INNER JOIN users U ON U.login = @1 AND U.id = P.user_id
-                            WHERE P.name = @0
-                            ", projectLookup.name, projectLookup.owner );
-
-            return new JsonResponse( 200, project );
         }
     }
 
