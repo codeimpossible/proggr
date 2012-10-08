@@ -17,7 +17,7 @@ namespace Proggr.Controllers.Filters
 
             var db = Database.OpenConnection( ConfigurationManager.AppSettings[ "SQLSERVER_CONNECTION_STRING" ] );
 
-            var worker = db.Workers.Find( worker_id );
+            var worker = db.Workers.FindById( worker_id );
 
             if( worker == null )
             {

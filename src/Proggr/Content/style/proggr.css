@@ -22,7 +22,6 @@ h3 code {
 }
 
 
-
 /* Tweak navbar brand link to be super sleek
 -------------------------------------------------- */
 
@@ -285,6 +284,22 @@ hr.soften {
 }
 
 
+big.mother-trucking-huge
+{
+    height: 200px;
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    font-size: 200px;
+}
+
+big.mother-trucking-huge [class^="icon-"], 
+big.mother-trucking-huge [class*="icon-"]
+{
+    margin-left: -150px;
+    margin-top: 50px;
+}
+
 
 /* Footer
 -------------------------------------------------- */
@@ -475,6 +490,12 @@ hr.soften {
 /* Misc
 -------------------------------------------------- */
 
+/* Fix clash between twitter-bootstrap icons and font-awesome */
+[class^="icon"], [class*="icon-"]
+{
+    background: none!important;
+}
+
 /* Make tables spaced out a bit more */
 h2 + table,
 h3 + table,
@@ -513,6 +534,17 @@ h2 + .row {
 .docs-input-sizes input[type=text] {
   display: block;
   margin-bottom: 9px;
+}
+
+/* Buttons (Metro Style)
+------------------------- */
+.btn {
+    border-radius: 0px!important;
+    -moz-border-radius: 0px!important;
+}
+
+.btn-primary {
+    background: #006DCC;
 }
 
 /* Icons

@@ -54,7 +54,13 @@ namespace Proggr.OAuth
             {
 
                 var val = cookie.Value;
-                var ticket = FormsAuthentication.Decrypt( val );
+                FormsAuthenticationTicket ticket = null;
+
+                try
+                {
+                    ticket = FormsAuthentication.Decrypt( val );
+                }
+                catch { }
 
                 if( ticket != null )
                 {
