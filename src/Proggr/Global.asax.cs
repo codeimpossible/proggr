@@ -38,7 +38,7 @@ namespace Proggr
                 MiniProfiler.Start();
             }
 
-            if( Request.Url.AbsolutePath.ToLowerInvariant().Contains( "elmah.axd" ) && !can_perform_admin_task )
+            if( Request.Url.AbsolutePath.ToLowerInvariant().EndsWith( "/elmah" ) && !can_perform_admin_task )
             {
                 HttpContext.Current.Response.RedirectToRoute( new { controllers = "Errors", action = "NotFound" } );
             }
