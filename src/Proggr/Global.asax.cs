@@ -30,10 +30,18 @@ namespace Proggr
         {
             var user = OAuthTicketHelper.GetUserFromCookie();
             var admin_users = ConfigurationManager.AppSettings["admin_users"];
-            if (Request.IsLocal || admin_users.Contains( user.Login ) )
+
+            var can_perform_admin_task = Request.IsLocal || admin_users.Contains( user.Login );
+
+            if ( can_perform_admin_task )
             {
                 MiniProfiler.Start();
-            } 
+            }
+
+            if( Request.Url.AbsolutePath.ToLowerInvariant().Contains( "elmah.axd" ) && !can_perform_admin_task )
+            {
+                HttpContext.Current.Response.RedirectToRoute( new { controllers = "Errors", action = "NotFound" } );
+            }
         }
 
         protected void Application_OnAuthenticateRequest()
