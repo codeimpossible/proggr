@@ -36,7 +36,8 @@ CREATE TABLE [dbo].[Jobs]
 (
 	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[type] INT NOT NULL, -- 1 analyze...
-	[worker_id] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Workers(id)
+	[worker_id] UNIQUEIDENTIFIER NOT NULL FOREIGN KEY REFERENCES Workers(id),
+	[status] INT NOT NULL DEFAULT(-1)
 )
 
 CREATE TABLE [dbo].[Languages]

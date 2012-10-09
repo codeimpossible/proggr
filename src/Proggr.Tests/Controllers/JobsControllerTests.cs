@@ -29,6 +29,18 @@ namespace Proggr.Tests.Controllers
         }
 
         [Fact]
+        public void Test_Next_ReturnsEmptyJobIfNoJobsExist()
+        {
+            Database.Open().Jobs.DeleteAll();
+
+            var result = _controller.Next( _test_worker_guid ) as JsonResponse;
+
+            dynamic jsonData = result.Data;
+
+            Assert.Equal( "EmptyJob", jsonData.Data.Job.type );
+        }
+
+        [Fact]
         public void Test_Next_ReturnsNewJobsOnly()
         {
             var result = _controller.Next( _test_worker_guid ) as JsonResponse;
@@ -36,7 +48,7 @@ namespace Proggr.Tests.Controllers
             dynamic jsonData = result.Data;
 
             Assert.NotNull( jsonData.Data.Job );
-            Assert.Equal( "UpdateUserRepos", jsonData.Data.Job.Type );
+            Assert.Equal( "UpdateUserRepos", jsonData.Data.Job.type );
         }
 
         [Fact]
@@ -49,7 +61,7 @@ namespace Proggr.Tests.Controllers
 
             dynamic jsonData = result.Data;
 
-            Assert.Equal( "AwardAchievements", jsonData.Data.Job.Type );
+            Assert.Equal( "AwardAchievements", jsonData.Data.Job.type );
         }
 
         [Fact]
@@ -59,7 +71,7 @@ namespace Proggr.Tests.Controllers
 
             dynamic jsonData = result.Data;
 
-            Assert.Equal( _test_worker_guid.ToString(), jsonData.Data.Job.worker_id );
+            Assert.Equal( _test_worker_guid, jsonData.Data.Job.worker_id );
         }
 
         [Fact]

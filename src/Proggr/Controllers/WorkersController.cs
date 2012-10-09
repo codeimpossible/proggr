@@ -26,7 +26,7 @@ namespace Proggr.Controllers
             var db = OpenDatabaseConnection();
 
             var current_user = db.Users.Find( db.Users.login == User.Identity.Name );
-            var worker = db.Workers.Find( db.Workers.user_id == current_user.id );
+            dynamic worker = db.Workers.Find( db.Workers.user_id == current_user.id );
 
             // TODO: if no worker exists, create one
             if( worker == null )
