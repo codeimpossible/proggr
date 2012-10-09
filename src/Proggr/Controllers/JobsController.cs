@@ -22,8 +22,6 @@ namespace Proggr.Controllers
         [MustBeValidWorker]
         public JsonResult Next( Guid worker_id )
         {
-            // TODO: validate worker guid
-
             var db = OpenDatabaseConnection();
 
             JsonJob job = db.Jobs.FindAll( db.Jobs.status == (int)JobStatus.New ).OrderBy( db.Jobs.created_at ).FirstOrDefault();
@@ -37,7 +35,6 @@ namespace Proggr.Controllers
             }
 
             return new JsonResponse( 200, new { 
-                Message = "Project Added Successfully!",
                 Job = job ?? JsonJob.Empty( worker_id )
             } );
         }
