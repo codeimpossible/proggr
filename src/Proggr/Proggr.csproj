@@ -177,6 +177,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Users.cs" />
+    <Compile Include="OAuth\GithubApiClient.cs" />
+    <Compile Include="OAuth\GithubAuthorizationClient.cs" />
+    <Compile Include="OAuth\GithubOauthModels.cs" />
+    <Compile Include="OAuth\IGithubClient.cs" />
     <Compile Include="OAuth\OAuthTicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -184,8 +188,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="App_Readme\glimpse.mvc3.readme.txt" />
-    <Content Include="App_Readme\glimpse.readme.txt" />
     <Content Include="Content\img\hackathon-wp7.jpg" />
     <Content Include="Content\js\handlebars.js" />
     <Content Include="Content\js\showRepos.js" />
