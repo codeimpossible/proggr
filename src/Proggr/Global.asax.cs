@@ -36,6 +36,9 @@ namespace Proggr
             if ( can_perform_admin_task )
             {
                 MiniProfiler.Start();
+
+                // enable glimpse
+                Request.Cookies.Add( new HttpCookie( "glimpseState", "on" ) { HttpOnly = false } );
             }
 
             if( Request.Url.AbsolutePath.ToLowerInvariant().EndsWith( "/elmah" ) && !can_perform_admin_task )

@@ -21,6 +21,17 @@ namespace Proggr.OAuth
         public bool IsError { get { return StatusCode != 200; } }
     }
 
+    public class EmptyGithubProfile : GithubProfile
+    {
+        public override bool IsEmpty
+        {
+            get
+            {
+                return true;
+            }
+        }
+    }
+
     public class GithubProfile
     {
         public string Login { get; set; }
@@ -43,6 +54,6 @@ namespace Proggr.OAuth
         public string CreatedAt { get; set; }
         public string Type { get; set; }
 
-        public bool IsEmpty { get; private set; }
+        public virtual bool IsEmpty { get; private set; }
     }
 }

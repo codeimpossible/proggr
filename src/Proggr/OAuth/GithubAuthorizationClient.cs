@@ -13,7 +13,8 @@ namespace Proggr.OAuth
 
         public GithubAuthorizationClient( IRestClient restClient = null )
         {
-            _restClient = restClient ?? new RestClient( "https://github.com/" );
+            _restClient = restClient ?? new RestClient();
+            _restClient.BaseUrl = "https://github.com/";
         }
 
         public GithubOauthResponse Authorize( string clientId, string clientSecret, string token )

@@ -8,17 +8,22 @@ namespace Proggr.OAuth
 {
     public class GithubApiClient : IGithubApiClient
     {
-        private RestClient _apiClient;
+        private IRestClient _apiClient;
+
+        public GithubApiClient() : this(null) { }
+        public GithubApiClient( IRestClient apiClient )
+        {
+            _apiClient = apiClient ?? new RestClient();
+            _apiClient.BaseUrl = "http://api.github.com";
+        }
 
         public GithubProfile GetProfile( string token )
         {
-            _apiClient = new RestClient( "https://api.github.com" );
-
             var apiRequest = new RestRequest( "/user?access_token=" + token, Method.GET );
 
             var apiResponse = _apiClient.Execute<GithubProfile>( apiRequest );
 
-            return apiResponse.Data;
+            return apiResponse == null ? new EmptyGithubProfile() : apiResponse.Data;
         }
     }
 }
