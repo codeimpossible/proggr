@@ -182,6 +182,7 @@
     <Compile Include="OAuth\GithubOauthModels.cs" />
     <Compile Include="OAuth\IGithubClient.cs" />
     <Compile Include="OAuth\OAuthTicketHelper.cs" />
+    <Compile Include="OAuth\TicketHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

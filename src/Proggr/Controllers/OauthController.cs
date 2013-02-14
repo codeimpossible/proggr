@@ -17,6 +17,8 @@ namespace Proggr.Controllers
         private IGithubAuthClient _authClient;
         private IGithubApiClient _apiClient;
 
+        private TicketHelper _ticketHelper = new OAuthTicketHelper();
+
         public OauthController() : this(null,null) { }
         public OauthController( IGithubAuthClient authClient = null, IGithubApiClient apiClient = null )
         {
@@ -65,8 +67,8 @@ namespace Proggr.Controllers
                     Name = profile.Name
                 };
 
-                OAuthTicketHelper.SetUserCookie( securityUser, true );
-                OAuthTicketHelper.SetAuthCookie( securityUser, true );
+                _ticketHelper.SetUserCookie( securityUser, true );
+                _ticketHelper.SetAuthCookie( securityUser, true );
 
                 return RedirectToAction( "Details", new { controller = "Profiles", id = profile.Login } );
             }

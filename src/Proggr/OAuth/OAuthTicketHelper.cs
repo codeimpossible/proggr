@@ -10,7 +10,7 @@ namespace Proggr.OAuth
     /// <summary>
     /// Helper methods for setting and retrieving a custom forms authentication ticket for delegation protocols.
     /// </summary>
-    public static class OAuthTicketHelper
+    public class OAuthTicketHelper : TicketHelper
     {
         /// <summary>
         /// The open auth cookie token.
@@ -18,7 +18,7 @@ namespace Proggr.OAuth
         private const string OpenAuthCookieToken = "OAuth";
 
 
-        public static void SetCookie( string data, string name, bool createPersistentCookie )
+        public void SetCookie( string data, string name, bool createPersistentCookie )
         {
             var ticketExpiration = DateTime.Now.AddMonths( 7 );
             var ticket = new FormsAuthenticationTicket( 1, name, DateTime.Now, ticketExpiration, createPersistentCookie, data );
@@ -33,7 +33,7 @@ namespace Proggr.OAuth
         }
 
 
-        public static void SetUserCookie( WebsiteUser user, bool createPersistentCookie )
+        public void SetUserCookie( WebsiteUser user, bool createPersistentCookie )
         {
             string userFormat = "{0}|{1}|{2}";
             if( GetUserFromCookie() != null )
@@ -45,7 +45,7 @@ namespace Proggr.OAuth
         }
 
 
-        public static WebsiteUser GetUserFromCookie()
+        public WebsiteUser GetUserFromCookie()
         {
             var cookie = System.Web.HttpContext.Current.Request.Cookies[ OpenAuthCookieToken ];
             WebsiteUser returningUser = WebsiteUser.Guest;
@@ -84,7 +84,7 @@ namespace Proggr.OAuth
         }
 
 
-        public static void RemoveUserCookie()
+        public void RemoveUserCookie()
         {
             System.Web.HttpContext.Current.Request.Cookies.Remove( OpenAuthCookieToken );
 
@@ -105,7 +105,7 @@ namespace Proggr.OAuth
         }
 
 
-        public static void SetAuthCookie( WebsiteUser user, bool createPersistentCookie )
+        public void SetAuthCookie( WebsiteUser user, bool createPersistentCookie )
         {
             FormsAuthentication.SetAuthCookie( user.Login, createPersistentCookie );
 

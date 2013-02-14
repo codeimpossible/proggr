@@ -5,14 +5,17 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Proggr.Models;
+using Proggr.OAuth;
 
 namespace Proggr.Controllers.Filters
 {
     public class MustBeLoggedInAttribute : ActionFilterAttribute
     {
+        private TicketHelper _ticketHelper = new OAuthTicketHelper();
+
         public override void OnActionExecuting( ActionExecutingContext filterContext )
         {
-            var user = OAuth.OAuthTicketHelper.GetUserFromCookie();
+            var user = _ticketHelper.GetUserFromCookie();
 
             if( user == WebsiteUser.Guest || user == null )
             {

@@ -16,6 +16,7 @@ namespace Proggr
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication
     {
+        private TicketHelper _ticketHelper = new OAuthTicketHelper();
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -28,7 +29,7 @@ namespace Proggr
 
         protected void Application_BeginRequest()
         {
-            var user = OAuthTicketHelper.GetUserFromCookie();
+            var user = _ticketHelper.GetUserFromCookie();
             var admin_users = ConfigurationManager.AppSettings["admin_users"];
 
             var can_perform_admin_task = Request.IsLocal || admin_users.Contains( user.Login );
@@ -53,11 +54,11 @@ namespace Proggr
 
             if( currentUser == null || !currentUser.Identity.IsAuthenticated )
             {
-                var user = OAuthTicketHelper.GetUserFromCookie();
+                var user = _ticketHelper.GetUserFromCookie();
 
                 if( user != null )
                 {
-                    OAuthTicketHelper.SetAuthCookie( user, true );
+                    _ticketHelper.SetAuthCookie( user, true );
                 }
             }
         }
