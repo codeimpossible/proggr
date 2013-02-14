@@ -98,6 +98,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\JobsControllerTests.cs" />
     <Compile Include="Controllers\Filters\MustBeValidWorkerTests.cs" />
     <Compile Include="Controllers\OAuthControllerTests.cs" />

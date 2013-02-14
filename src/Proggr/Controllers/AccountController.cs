@@ -15,14 +15,19 @@ using WebMatrix.WebData;
 namespace Proggr.Controllers
 {
     [MustBeLoggedIn]
-    public class AccountController : Controller
+    public class AccountController : AuthControllerBase
     {
+        public AccountController(TicketHelper ticketHelper = null) : base(ticketHelper)
+        {
+            _ticketHelper = ticketHelper ?? _ticketHelper;
+        }
+
         [HttpGet]
         public ActionResult LogOff()
         {
-            OAuthTicketHelper.RemoveUserCookie();
+            _ticketHelper.RemoveUserCookie();
 
-            return RedirectToAction( "Index", "Home" );
-        }        
+            return RedirectToAction("Index", new { controller = "Home" });
+        }
     }
 }
