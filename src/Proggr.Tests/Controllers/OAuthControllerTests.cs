@@ -56,6 +56,26 @@ namespace Proggr.Tests.Controllers {
         }
 
         [Fact]
+        public void Test_Callback_GithubReturnsProfile_UserDoesNotExist_UserIsCreated() {
+            Database.Open().Users.DeleteAll();
+
+            MockGithubApi_ReturnProfile();
+            MockGithubOauth_ReturnGoodResponse();
+
+            _controller = new OauthController( 
+                authClient: _mockGithubOauth.Object, 
+                settings: new FakeSettings(),
+                apiClient: _mockGithubApi.Object,
+                ticketHelper: _mockTicketHelper.Object );
+
+            _controller.Callback("test");
+
+            var users = Database.Open().Users.All();
+
+            Assert.Equal( 1, users.Count() );
+        }
+
+        [Fact]
         public void Test_Callback_GithubReturnsError_RedirectToAuthErrorAction() {
             MockGithubOauth_ReturnFailureResponse();
 
@@ -63,9 +83,9 @@ namespace Proggr.Tests.Controllers {
 
             var result = _controller.Callback( "test" ) as RedirectToRouteResult;
 
-            Assert.NotNull(result);
-            Assert.Equal("Errors", result.RouteValues["controller"]);
-            Assert.Equal("AuthError", result.RouteValues["action"]);
+            Assert.NotNull( result );
+            Assert.Equal( "Errors", result.RouteValues[ "controller" ] );
+            Assert.Equal( "AuthError", result.RouteValues[ "action" ] );
         }
 
         private void MockGithubOauth_ReturnGoodResponse() {
