@@ -15,9 +15,9 @@ using WebMatrix.WebData;
 namespace Proggr.Controllers
 {
     [MustBeLoggedIn]
-    public class AccountController : AuthControllerBase
+    public class AccountController : ControllerBase
     {
-        public AccountController(TicketHelper ticketHelper = null) : base(ticketHelper)
+        public AccountController(TicketHelper ticketHelper = null) : base(null, ticketHelper)
         {
             _ticketHelper = ticketHelper ?? _ticketHelper;
         }

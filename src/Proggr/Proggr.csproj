@@ -159,12 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
+    <Compile Include="Configuration\ConfigurationSettings.cs" />
+    <Compile Include="Configuration\WebConfigurationSettings.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\Filters\MustBeAdminUserAttribute.cs" />
     <Compile Include="Controllers\Filters\MustBeLoggedInAttribute.cs" />
-    <Compile Include="Controllers\DataControllerBase.cs" />
     <Compile Include="Controllers\Filters\MustBeValidWorker.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobsController.cs" />

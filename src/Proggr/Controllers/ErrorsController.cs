@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace Proggr.Controllers
 {
-    public class ErrorsController : Controller
+    public class ErrorsController : ControllerBase
     {
         public ActionResult Index()
         {

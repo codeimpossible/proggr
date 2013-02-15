@@ -8,7 +8,7 @@ using Proggr.Controllers.Responses;
 
 namespace Proggr.Controllers
 {
-    public class JobsController : DataControllerBase
+    public class JobsController : ControllerBase
     {
 
         private enum JobStatus

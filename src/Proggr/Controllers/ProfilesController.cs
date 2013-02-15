@@ -8,7 +8,7 @@ using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class ProfilesController : DataControllerBase
+    public class ProfilesController : ControllerBase
     {
         public ActionResult Index()
         {

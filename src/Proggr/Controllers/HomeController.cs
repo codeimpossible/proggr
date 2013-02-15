@@ -8,7 +8,7 @@ using System.Web.Security;
 
 namespace Proggr.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ControllerBase
     {
         public ActionResult Index()
         {

@@ -4,26 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Proggr.Configuration;
+using Simple.Data;
 
 namespace Proggr.Controllers
 {
     public class ControllerBase : Controller
     {
-
-    }
-
-    public class AuthControllerBase: ControllerBase
-    {
         protected TicketHelper _ticketHelper;
+        protected ConfigurationSettings _configuration;
 
-        public AuthControllerBase() : this(null)
+        public ControllerBase() : this(null, null) { }
+        public ControllerBase(ConfigurationSettings settings, TicketHelper ticketHelper)
         {
-
+            _configuration = settings ?? new WebConfigurationSettings();
+            _ticketHelper = ticketHelper ?? new OAuthTicketHelper();
         }
 
-        public AuthControllerBase(TicketHelper ticketHelper)
-        {
-            _ticketHelper = ticketHelper ?? new OAuthTicketHelper();
+        public dynamic OpenDatabaseConnection() {
+            return Database.OpenConnection( _configuration.DatabaseConnectionString );
         }
     }
 }

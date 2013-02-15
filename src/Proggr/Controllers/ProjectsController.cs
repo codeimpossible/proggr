@@ -10,7 +10,7 @@ using Simple.Data;
 
 namespace Proggr.Controllers
 {
-    public class ProjectsController : DataControllerBase
+    public class ProjectsController : ControllerBase
     {
         [HttpPost]
         [MustBeLoggedIn]

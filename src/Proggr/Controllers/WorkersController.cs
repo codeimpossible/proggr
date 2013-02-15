@@ -9,7 +9,7 @@ using Proggr.Models;
 
 namespace Proggr.Controllers
 {
-    public class WorkersController : DataControllerBase
+    public class WorkersController : ControllerBase
     {
 
         [MustBeAdminUser]
