@@ -10,6 +10,7 @@ namespace Proggr.Controllers
     {
         public ActionResult Index()
         {
+            Response.StatusCode = 412;
             return View();
         }
 
@@ -21,11 +22,13 @@ namespace Proggr.Controllers
 
         public ActionResult MustBeLoggedIn()
         {
+            Response.StatusCode = 401;
             return View();
         }
 
         public ActionResult AuthError()
         {
+            Response.StatusCode = 401;
             return View();
         }
     }
