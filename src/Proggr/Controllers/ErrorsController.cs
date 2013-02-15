@@ -23,5 +23,10 @@ namespace Proggr.Controllers
         {
             return View();
         }
+
+        public ActionResult AuthError()
+        {
+            return View();
+        }
     }
 }
