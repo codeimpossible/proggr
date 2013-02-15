@@ -20,8 +20,7 @@ namespace Proggr.Tests.Controllers {
         readonly Mock<IGithubAuthClient> _mockGithubOauth = new Mock<IGithubAuthClient>( MockBehavior.Strict );
         readonly Mock<TicketHelper> _mockTicketHelper = new Mock<TicketHelper>( MockBehavior.Loose );
 
-        public class FakeSettings : ConfigurationSettings
-        {
+        public class FakeSettings : ConfigurationSettings {
 
             public string OAuthClientSecret {
                 get { return "test_secret"; }
@@ -36,8 +35,7 @@ namespace Proggr.Tests.Controllers {
             }
         }
 
-        public OAuthControllerTests()
-        {
+        public OAuthControllerTests() {
             MockHelper.UseMockAdapter( new InMemoryAdapter() );
         }
 
@@ -46,8 +44,8 @@ namespace Proggr.Tests.Controllers {
             MockGithubApi_ReturnProfile();
             MockGithubOauth_ReturnGoodResponse();
 
-            _controller = new OauthController( 
-                authClient: _mockGithubOauth.Object, 
+            _controller = new OauthController(
+                authClient: _mockGithubOauth.Object,
                 apiClient: _mockGithubApi.Object,
                 ticketHelper: _mockTicketHelper.Object,
                 settings: new FakeSettings() );
@@ -57,10 +55,29 @@ namespace Proggr.Tests.Controllers {
             Assert.IsType<RedirectToRouteResult>( result );
         }
 
+        [Fact]
+        public void Test_Callback_GithubReturnsError_RedirectToAuthErrorAction() {
+            MockGithubOauth_ReturnFailureResponse();
+
+            _controller = new OauthController( authClient: _mockGithubOauth.Object, settings: new FakeSettings() );
+
+            var result = _controller.Callback( "test" ) as RedirectToRouteResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("Errors", result.RouteValues["controller"]);
+            Assert.Equal("AuthError", result.RouteValues["action"]);
+        }
+
         private void MockGithubOauth_ReturnGoodResponse() {
             var response = new GithubOauthResponse() { StatusCode = 200, AccessToken = "test_token" };
             _mockGithubOauth.Setup( m => m.Authorize( "test_key", "test_secret", "test" ) )
-                .Returns( response );
+                            .Returns( response );
+        }
+
+        private void MockGithubOauth_ReturnFailureResponse() {
+            var response = new GithubOauthResponse() { StatusCode = 412 };
+            _mockGithubOauth.Setup( m => m.Authorize( "test_key", "test_secret", "test" ) )
+                            .Returns( response );
         }
 
         private void MockGithubApi_ReturnProfile() {
