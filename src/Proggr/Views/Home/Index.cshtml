@@ -8,7 +8,7 @@
         }
         else
         {
-            var user = Proggr.OAuth.OAuthTicketHelper.GetUserFromCookie();
+            var user = ViewBag.current_user;
             <p><a href="/profiles/@user.Login" class="btn btn-primary btn-large">View your profile</a></p>
         }
         <ul class="masthead-links">

@@ -13,7 +13,9 @@ namespace Proggr.Controllers
         public ActionResult Index()
         {
 
-            ViewBag.client_id = ConfigurationManager.AppSettings[ "github.oauth.clientkey" ];
+            ViewBag.client_id = _configuration.OAuthClientKey;
+
+            ViewBag.current_user = _ticketHelper.GetUserFromCookie();
 
             return View();
         }
