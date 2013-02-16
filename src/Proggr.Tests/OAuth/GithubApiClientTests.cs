@@ -25,7 +25,7 @@ namespace Proggr.Tests.OAuth
                 .SetupSet( p => p.BaseUrl = It.IsAny<string>() )
                     .Callback<string>( value =>
                     {
-                        Assert.Equal( "http://api.github.com", value );
+                        Assert.Equal( "https://api.github.com", value );
                     } )
                     .Verifiable();
             _client = new GithubApiClient( mockRestSharpApiClient.Object );
