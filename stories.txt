@@ -1,0 +1,3 @@
+Projects
+    - users add project to proggr
+        - projects can be turned on/off

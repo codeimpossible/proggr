@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Proggr.Controllers.Filters;
 using Proggr.Controllers.Responses;
+using Proggr.Models;
 
 namespace Proggr.Controllers
 {
@@ -24,7 +25,7 @@ namespace Proggr.Controllers
         {
             var db = OpenDatabaseConnection();
 
-            JsonJob job = db.Jobs.FindAll( db.Jobs.status == (int)JobStatus.New ).OrderBy( db.Jobs.created_at ).FirstOrDefault();
+            Job job = db.Jobs.FindAll( db.Jobs.status == (int)JobStatus.New ).OrderBy( db.Jobs.created_at ).FirstOrDefault();
             
             if( job != null )
             {
@@ -35,21 +36,8 @@ namespace Proggr.Controllers
             }
 
             return new JsonResponse( 200, new { 
-                Job = job ?? JsonJob.Empty( worker_id )
+                Job = job ?? Job.Empty( worker_id )
             } );
-        }
-
-        public class JsonJob
-        {
-            public static JsonJob Empty( Guid worker_id )
-            {
-                return new JsonJob { created_at = DateTime.Now, worker_id = worker_id, status = -1, type = "EmptyJob", id = -1 };
-            }
-            public int id { get; set; }
-            public Guid worker_id { get; set; }
-            public string type { get; set; }
-            public int status { get; set; }
-            public DateTime created_at { get; set; }
         }
 
     }

@@ -14,29 +14,27 @@ namespace Proggr.Controllers
     {
         [HttpPost]
         [MustBeLoggedIn]
-        public JsonResult Create( NewProject newProject )
+        public JsonResult Create(Project newProject)
         {
-            // TODO: validate worker guid
-
             var db = OpenDatabaseConnection();
 
-            db.Projects.Insert( newProject );
+            var savedProject = db.Projects.Insert(newProject);
 
-            return new JsonResponse( 200, new { Message = "Project Added Successfully!" } );
+            Response.StatusCode = 201;
+
+            return new JsonResponse(Response.StatusCode, savedProject);
         }
-    }
 
-    public class NewProject
-    {
-        public string name { get; set; }
-        public string url { get; set; }
-        public string owner_id { get; set; }
-        public string description { get; set; }
-    }
+        [HttpGet]
+        public JsonResult Details(int id)
+        {
+            var db = OpenDatabaseConnection();
 
-    public class ProjectLookup
-    {
-        public string owner { get; set; }
-        public string name { get; set; }
+            var data = db.Projects.Find(db.Projects.id == id);
+
+            Response.StatusCode = 200;
+
+            return new JsonResponse(Response.StatusCode, data);
+        }
     }
 }

@@ -116,6 +116,8 @@
     <Compile Include="OAuth\GithubApiClientTests.cs" />
     <Compile Include="OAuth\GithubAuthClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stories\Projects\AddingAProject.cs" />
+    <Compile Include="StubbedController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
