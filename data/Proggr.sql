@@ -1,4 +1,135 @@
-﻿CREATE TABLE [dbo].[Users]
+﻿USE [master]
+GO
+
+/****** Object:  Database [proggr]    Script Date: 3/14/2014 11:07:45 PM ******/
+DROP DATABASE [proggr]
+GO
+
+
+USE [master]
+GO
+
+/****** Object:  Database [proggr]    Script Date: 3/14/2014 11:07:16 PM ******/
+CREATE DATABASE [proggr]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'proggr', FILENAME = N'c:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS2012\MSSQL\DATA\proggr.mdf' , SIZE = 3072KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'proggr_log', FILENAME = N'c:\Program Files\Microsoft SQL Server\MSSQL11.SQLEXPRESS2012\MSSQL\DATA\proggr_log.ldf' , SIZE = 1024KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+
+ALTER DATABASE [proggr] SET COMPATIBILITY_LEVEL = 110
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [proggr].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+
+ALTER DATABASE [proggr] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [proggr] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [proggr] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [proggr] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [proggr] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [proggr] SET AUTO_CLOSE OFF 
+GO
+
+ALTER DATABASE [proggr] SET AUTO_CREATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [proggr] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [proggr] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [proggr] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [proggr] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [proggr] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [proggr] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [proggr] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [proggr] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [proggr] SET  DISABLE_BROKER 
+GO
+
+ALTER DATABASE [proggr] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [proggr] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [proggr] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [proggr] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [proggr] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [proggr] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [proggr] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [proggr] SET RECOVERY SIMPLE 
+GO
+
+ALTER DATABASE [proggr] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [proggr] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [proggr] SET DB_CHAINING OFF 
+GO
+
+ALTER DATABASE [proggr] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+
+ALTER DATABASE [proggr] SET TARGET_RECOVERY_TIME = 0 SECONDS 
+GO
+
+ALTER DATABASE [proggr] SET  READ_WRITE 
+GO
+
+USE [proggr]
+GO
+
+CREATE TABLE [dbo].[Languages]
+(
+	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[name] NVARCHAR(200),
+	[short_name] NVARCHAR(20)
+)
+
+GO
+
+CREATE TABLE [dbo].[Users]
 (
 	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[login] NVARCHAR(300) NOT NULL,
@@ -11,6 +142,7 @@ GO
 
 CREATE INDEX [IX_Users_login] ON [dbo].[Users] ([login])
 
+GO
 
 CREATE TABLE [dbo].[Projects]
 (
@@ -22,7 +154,11 @@ CREATE TABLE [dbo].[Projects]
 	[primary_language_id] INT NULL FOREIGN KEY REFERENCES Languages(id)
 )
 
+GO
+
 CREATE INDEX [IX_Projects_name] ON [dbo].[Users] ([name])
+
+GO
 
 CREATE TABLE [dbo].[Workers]
 (
@@ -31,6 +167,8 @@ CREATE TABLE [dbo].[Workers]
 	[created_at] DATETIME NOT NULL DEFAULT( getdate() ),
 	[last_report] DATETIME
 )
+
+GO
 
 CREATE TABLE [dbo].[Jobs]
 (
@@ -41,19 +179,16 @@ CREATE TABLE [dbo].[Jobs]
 	[created_at] DATETIME NOT NULL DEFAULT( getdate() )
 )
 
-CREATE TABLE [dbo].[Languages]
-(
-	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[name] NVARCHAR(200),
-	[short_name] NVARCHAR(20)
-)
+GO
 
-CREATE TABLE [dbo].[Extentions]
+CREATE TABLE [dbo].[Extensions]
 (
 	[id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[extension] NVARCHAR(5) NOT NULL,
+	[extension] NVARCHAR(12) NOT NULL,
 	[language_id] INT NOT NULL FOREIGN KEY REFERENCES Languages(id)
 )
+
+GO
 
 -- bootstrap the languages table
 SET IDENTITY_INSERT Languages ON
@@ -100,7 +235,3 @@ INSERT INTO [dbo].[Extensions] ( id, extension, language_id ) VALUES (17, 'py', 
 INSERT INTO [dbo].[Extensions] ( id, extension, language_id ) VALUES (18, 'pl', 17)
 
 SET IDENTITY_INSERT Extensions OFF
-
-
-
-
