@@ -93,6 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\JobPoller.cs" />
     <Compile Include="Controllers\WorkerRegistrationController.cs" />
     <Compile Include="IpAddress.cs" />
     <Compile Include="Jobs\ImportJob.cs" />
