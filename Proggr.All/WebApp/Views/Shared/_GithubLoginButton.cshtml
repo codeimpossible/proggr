@@ -1,0 +1,4 @@
+﻿@using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = "/App" })) {
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary btn-large" id="GitHub" name="provider" value="GitHub" title="Log in using your Github account">Sign in with Github</button>
+}

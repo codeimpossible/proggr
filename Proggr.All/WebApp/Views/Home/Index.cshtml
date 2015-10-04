@@ -1,7 +1,92 @@
-﻿@section SPAViews {
-    @Html.Partial("_Home")
-}
-@section Scripts{
-    @Scripts.Render("~/bundles/knockout")
-    @Scripts.Render("~/bundles/app")
-}
+﻿<div class="jumbotron masthead">
+    <div class="container">
+        <h1>proggr</h1>
+        <p>Open source bragging rights, powered by Github... and magical love pancakes.</p>
+        <p>
+            @Html.Partial("_GithubLoginButton")
+        </p>
+        <ul class="masthead-links">
+            <li><a href="http://github.com/codeimpossible/proggr">View the source for this on Github</a></li>
+            <li>v.01</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="marketing">
+
+        <h1>Meet proggr.</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <big class="mother-trucking-huge">
+                    <i class="icon-github">&nbsp;</i>
+                </big>
+                <h2>Built FUBU style</h2>
+                <p>For open-source devs, by open-source devs. Proggr works exclusively with Github to provide you with a the data you want to see.</p>
+            </div>
+            <div class="col-md-4">
+                <big class="mother-trucking-huge">
+                    <i class="icon-user">&nbsp;</i>
+                </big>
+                <h2>Focusing on the individuals</h2>
+                <p>Open source is huge but it's driven by individuals. Proggr highligts the accomplishments of individuals across the open source community.</p>
+            </div>
+            <div class="col-md-4">
+                <big class="mother-trucking-huge">
+                    <i class="icon-group">&nbsp;</i>
+                </big>
+                <h2>Powered by the collective</h2>
+                <p>All of our infrastructure is open-source! Any proggr user can run a proggr worker and help the bigger mission of providing bragging rights to all open source developers.</p>
+            </div>
+        </div>
+        <hr class="soften">
+        <h1>Built with Open-Source.</h1>
+        <p class="marketing-byline">We love open-source so much that we used an almost entirely open stack to bring this site to you!</p>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3>Asp.net MVC</h3>
+                        <p>The "Web stack of love" brought to you by Microsoft!</p>
+                        <p><a href="http://aspnet.codeplex.com/" class="btn btn-primary">Read More</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3>Twitter Bootstrap</h3>
+                        <p>Yep, we're yet another bootstrap'd website!</p>
+                        <p><a href="http://twitter.github.com/bootstrap/" class="btn btn-primary">Read More</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3>Font-Awesome</h3>
+                        <p>Scaleable, open graphics for the win!</p>
+                        <p><a href="http://font-awesome.com/" class="btn btn-primary">Read More</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3>Simple.Data</h3>
+                        <p>Dealing with your database should be simple.</p>
+                        <p><a href="http://github.com/markrendle/simple.data/" class="btn btn-primary">Read More</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="soften">
+</div>

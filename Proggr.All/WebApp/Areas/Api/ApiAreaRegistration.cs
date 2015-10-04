@@ -16,7 +16,7 @@ namespace WebApp.Areas.Api
         {
             context.MapRoute(
                 name: "CurrentUserApi",
-                url: "api/user/{username}/{action}",
+                url: "api/user/{action}",
                 defaults: new { controller = "CurrentUser", action = "Index" }
             );
 

@@ -28,7 +28,7 @@ export class Home extends React.Component {
   }
 
   componentDidMount() {
-    ajax('/api/user/codeimpossible/repos').then(function(repos) {
+    ajax('/api/user/repos').then(function(repos) {
       this.setState({
         repos: repos
       });
@@ -37,9 +37,9 @@ export class Home extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="well">
         <h2>Your Repos?</h2>
-        <div style={{overflow: 'auto', maxHeight: 400}}>
+        <div>
           <ReactList itemRenderer={this.renderItem} length={this.state.repos.length} type='simple' />
         </div>
       </div>

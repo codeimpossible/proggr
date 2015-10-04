@@ -6,14 +6,14 @@ using Microsoft.AspNet.Identity;
 
 namespace WebApp.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()
         {
-
-            ViewBag.CurrentUserName = User.Identity.Name;
-            ViewBag.CurrentUserId = User.Identity.GetUserId();
+            if (Request.IsAuthenticated)
+            {
+                return RedirectToRoute(new { Controller = "App", Action = "Index" });
+            }
 
             return View();
         }

@@ -22,7 +22,10 @@ namespace WebApp
             bundles.Add(app);
             
             // use bootstrap for now
-            bundles.Add(new StyleBundle("~/bundles/basestyles").Include("~/Content/bootstrap.min.css"));
+            bundles.Add(new StyleBundle("~/bundles/basestyles")
+                .Include("~/Content/bootstrap.min.css")
+                .Include("~/Content/font-awesome.min.css")
+                .Include("~/Content/site.base.css"));
         }
     }
 }

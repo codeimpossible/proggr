@@ -23,3 +23,7 @@ body {
 .content {
   margin-top: 60px;
 }
+
+.navbar .avatar {
+  margin-right: 10px;
+}

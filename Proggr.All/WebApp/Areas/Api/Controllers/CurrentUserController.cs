@@ -12,10 +12,9 @@ using WebApp.Data;
 namespace WebApp.Areas.Api.Controllers
 {
     [Authorize]
-    [CurrentUserOnly]
     public class CurrentUserController : Controller
     {
-        public async Task<ActionResult> Index(string username)
+        public async Task<ActionResult> Index()
         {
             var currentUserName = User.Identity.Name;
             var storage = Storage.Current();
@@ -29,7 +28,7 @@ namespace WebApp.Areas.Api.Controllers
             return Content(user.UserJsonData, "application/json", Encoding.UTF8);
         }
 
-        public async Task<ActionResult> Repos(string username)
+        public async Task<ActionResult> Repos()
         {
             var currentUserName = User.Identity.Name;
             var apiData = Storage.Current().GithubJsonData.Get(currentUserName);
@@ -37,24 +36,18 @@ namespace WebApp.Areas.Api.Controllers
             {
                 return new HttpNotFoundResult();
             }
-            var reposCache = apiData.ReposJsonData;
 
-            if (String.IsNullOrWhiteSpace(reposCache))
-            {
-                // we need to fetch this from the github api
-                var token = apiData.ApiToken;
-                var client = new GitHubClient(new ProductHeaderValue("proggr")) { Credentials = new Credentials(token) };
-                var repos = await client.Repository.GetAllForUser(currentUserName);
+            // TODO: cache this
 
-                // store the repos back into the github table
-                Storage.StoreRepositoryJson(currentUserName, repos);
+            // we need to fetch this from the github api
+            var token = apiData.ApiToken;
+            var client = new GitHubClient(new ProductHeaderValue("proggr")) { Credentials = new Credentials(token) };
+            var repos = await client.Repository.GetAllForCurrent();
 
-                return Json(repos, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Content(reposCache, "application/json", Encoding.UTF8);
-            }
+            // store the repos back into the github table
+            Storage.StoreRepositoryJson(currentUserName, repos);
+
+            return Json(repos, JsonRequestBehavior.AllowGet);
         }
     }
 }
