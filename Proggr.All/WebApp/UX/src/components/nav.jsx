@@ -11,7 +11,9 @@ export class Nav extends React.Component {
         {this.props.currentUser.login}
       </Link>
     ) : (
-      <Wait />
+      <Link to="/profile">
+        <Wait />
+      </Link>
     );
     return (
       <nav className="navbar navbar-inverse navbar-fixed-top">

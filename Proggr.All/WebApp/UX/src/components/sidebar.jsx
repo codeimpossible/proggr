@@ -8,7 +8,7 @@ import '../styles/sidebar.css'
 export class Sidebar extends React.Component {
   render() {
     let profileInfo = this.props.currentUser ? (
-      <div className="col-md-12 profile-container">
+      <div>
         <div className="avatar">
           <img src={this.props.currentUser.avatar_url} className="img-responsive" />
         </div>
@@ -22,7 +22,9 @@ export class Sidebar extends React.Component {
     return (
       <div className="col-md-3 sidebar">
         <div className="row profile">
-          {profileInfo}
+          <div className="col-md-12 profile-container">
+            {profileInfo}
+          </div>
         </div>
         <div className="row">
           <div className="col-md-12">

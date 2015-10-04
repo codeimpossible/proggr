@@ -1,7 +1,5 @@
 ﻿var gulp = require('gulp');
 var path = require('path');
-var babel = require('gulp-babel');
-var react = require('gulp-react');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
@@ -18,14 +16,8 @@ var webpackResult = function(taskname, callback) {
   }
 }
 
-gulp.task('default', ['es6'], function () { });
+gulp.task('default', ['webpack:server'], function () { });
 gulp.task('build', ['webpack:prod']);
-
-gulp.task('es6', function () {
-  return gulp.src(['src/**/*.es6', 'src/**/*.jsx'])
-    .pipe(babel())
-    .pipe(gulp.dest('src'));
-});
 
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
@@ -37,14 +29,14 @@ gulp.task('dev', ['webpack:dev'], function () {
 
 // create a single instance of the compiler to allow caching
 var devCompiler;
-gulp.task('webpack:dev', ['es6'], function (callback) {
+gulp.task('webpack:dev', function (callback) {
   webpackConfig.debug = true;
   devCompiler = devCompiler || webpack(webpackConfig);
   devCompiler.run(webpackResult('webpack:dev', callback));
 });
 
 
-gulp.task('webpack:prod', ['es6'], function (callback) {
+gulp.task('webpack:prod', function (callback) {
   webpackConfig.plugins = webpackConfig.plugins.concat(
 		new webpack.DefinePlugin({
 		  "process.env": {
