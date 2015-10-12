@@ -37,3 +37,7 @@
   font-weight: 600;
   margin-bottom: 15px;
 }
+
+.nav-right li a {
+  text-align: right;
+}

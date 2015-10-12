@@ -13,9 +13,9 @@ namespace Worker.Controllers
         private readonly IWorkerRepository _repository;
         private WorkerState _workerState;
 
-        public WorkerRegistrationController(IWorkerRepository repository)
+        public WorkerRegistrationController(ILocator locator)
         {
-            _repository = repository;
+            _repository = locator.Locate<IWorkerRepository>();
         }
 
         public WorkerState EnsureWorkerRegistration()

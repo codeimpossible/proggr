@@ -15,7 +15,7 @@ namespace WebApp.Modules
         public void OnBeginRequest(Object sender, EventArgs e)
         {
             var httpApp = (HttpApplication)sender;
-            var id = new Guid().ToString().Substring(0, 8);
+            var id = Guid.NewGuid().ToString().Substring(0, 8);
             HttpRuntime.Cache["RequestId"] = httpApp.Context.Items["RequestId"] = id;
         }
 

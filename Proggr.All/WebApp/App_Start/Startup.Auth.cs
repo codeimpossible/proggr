@@ -61,34 +61,20 @@ namespace WebApp
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
             app.UseOAuthBearerTokens(OAuthOptions);
 
-            var config = new Configuration();
-
             var options = new GitHubAuthenticationOptions
             {
                 // TODO: move these to an external config file
-                ClientId = config.GetClientId(),
-                ClientSecret = config.GetClientSecret(),
+                ClientId = WebApp.Configuration.Current().GetClientId(),
+                ClientSecret = WebApp.Configuration.Current().GetClientSecret(),
                 Provider = new GitHubAuthenticationProvider
                 {
 #pragma warning disable 1998
                     OnAuthenticated = async context =>
                     {
-                        var accessToken = context.AccessToken;
-                        var json = JsonConvert.SerializeObject(context.User);
-
-                        var db = Storage.Current();
                         try
                         {
-                            var userjson = db.GithubJsonData.FindAllByGithubUserName(context.UserName).FirstOrDefault();
-                            if (userjson == null)
-                            {
-                                db.GithubJsonData.Insert(GithubUserName: context.UserName, ApiToken: accessToken, UserJsonData: json, DateUpdated: DateTime.UtcNow, DateCreated: DateTime.UtcNow);
-                            }
-                            else
-                            {
-                                db.GithubJsonData.UpdateByGithubUserName(GithubUserName: context.UserName,
-                                    ApiToken: accessToken, UserJsonData: json, DateUpdated: DateTime.UtcNow);
-                            }
+                            Storage.StoreApiData(context.UserName, Storage.APIDATA_KEY_APITOKEN, context.AccessToken);
+                            // TODO: prefetch some data?
                         }
                         catch (Exception e)
                         {

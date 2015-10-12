@@ -17,37 +17,42 @@ namespace WebApp.Areas.Api.Controllers
         public async Task<ActionResult> Index()
         {
             var currentUserName = User.Identity.Name;
-            var storage = Storage.Current();
-            var user = storage.GithubJsonData.FindAllByGithubUserName(currentUserName).FirstOrDefault();
+            var userJson = Storage.GetApiData(currentUserName, Storage.APIDATA_KEY_USER);
 
-            if (user == null)
+            if (userJson == null)
             {
-                return new HttpNotFoundResult();
+                // get the data from the API
+                var client = CreateClient();
+                var user = await client.User.Current();
+
+                Storage.StoreApiData(currentUserName, Storage.APIDATA_KEY_USER, user);
+
+                return Json(User, JsonRequestBehavior.AllowGet);
             }
 
-            return Content(user.UserJsonData, "application/json", Encoding.UTF8);
+            return Content(userJson, "application/json", Encoding.UTF8);
         }
 
         public async Task<ActionResult> Repos()
         {
             var currentUserName = User.Identity.Name;
-            var apiData = Storage.Current().GithubJsonData.Get(currentUserName);
-            if (apiData == null)
-            {
-                return new HttpNotFoundResult();
-            }
-
-            // TODO: cache this
-
+            
             // we need to fetch this from the github api
-            var token = apiData.ApiToken;
-            var client = new GitHubClient(new ProductHeaderValue("proggr")) { Credentials = new Credentials(token) };
+            var client = CreateClient();
             var repos = await client.Repository.GetAllForCurrent();
 
             // store the repos back into the github table
-            Storage.StoreRepositoryJson(currentUserName, repos);
+            Storage.StoreApiData(currentUserName, Storage.APIDATA_KEY_REPOSITORIES, repos);
 
             return Json(repos, JsonRequestBehavior.AllowGet);
+        }
+
+        private GitHubClient CreateClient()
+        {
+            var currentUserName = User.Identity.Name;
+            var token = Storage.GetApiData(currentUserName, Storage.APIDATA_KEY_APITOKEN);
+            if (token == null) return null;
+            return new GitHubClient(new ProductHeaderValue("proggr")) {Credentials = new Credentials(token)};
         }
     }
 }

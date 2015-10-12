@@ -36,6 +36,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Encryptamajig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Encryptamajig.1.0.0.0\lib\net40\Encryptamajig.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="LibGit2Sharp, Version=0.21.0.176, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\LibGit2Sharp.0.21.0.176\lib\net40\LibGit2Sharp.dll</HintPath>
       <Private>True</Private>
@@ -93,27 +97,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\CommitController.cs" />
     <Compile Include="Controllers\JobPoller.cs" />
+    <Compile Include="Controllers\RepositoryController.cs" />
     <Compile Include="Controllers\WorkerRegistrationController.cs" />
     <Compile Include="IpAddress.cs" />
+    <Compile Include="Jobs\DetectAndHashJob.cs" />
     <Compile Include="Jobs\ImportJob.cs" />
     <Compile Include="Jobs\Job.cs" />
     <Compile Include="Jobs\CloneJob.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\JobFactory.cs" />
+    <Compile Include="Locator.cs" />
     <Compile Include="Models\CodeLocation.cs" />
     <Compile Include="Models\CommitData.cs" />
+    <Compile Include="Models\File.cs" />
     <Compile Include="Models\JobResults.cs" />
     <Compile Include="Models\WorkerState.cs" />
     <Compile Include="Models\JobDescriptor.cs" />
     <Compile Include="Repositories\ApiDataRepository.cs" />
     <Compile Include="Repositories\CodeLocationRepository.cs" />
+    <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\IApiDataRepository.cs" />
     <Compile Include="Repositories\ICodeLocationRepository.cs" />
+    <Compile Include="Repositories\IFileRepository.cs" />
     <Compile Include="Repositories\IJobRepository.cs" />
     <Compile Include="Repositories\IWorkerRepository.cs" />
     <Compile Include="Repositories\JobRepository.cs" />
+    <Compile Include="Repositories\SimpleDataRepository.cs" />
     <Compile Include="Repositories\WorkerRepository.cs" />
+    <Compile Include="Startup.IoC.cs" />
     <Compile Include="Views\WorkloadView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,7 +163,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Proggr.LangDetect\Proggr.LangDetect.csproj">
+      <Project>{34325A7D-D481-4B00-A46D-50674239B859}</Project>
+      <Name>Proggr.LangDetect</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

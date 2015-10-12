@@ -17,6 +17,8 @@ namespace Worker
         private static IJobRepository _jobRepository;
         private static WorkerState _worker;
 
+        private static readonly Locator _locator = new Locator();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -26,17 +28,19 @@ namespace Worker
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            StartupIoC.RegisterIoC(_locator);
+
             // make sure we're able to do work
-            _worker = new WorkerRegistrationController(new WorkerRepository()).EnsureWorkerRegistration();
-            _jobRepository = new JobRepository();
+            _worker = new WorkerRegistrationController(_locator).EnsureWorkerRegistration();
+            _jobRepository = _locator.Locate<IJobRepository>();
             _presenter = new WorkloadPresenter(new WorkloadView());
 
-            var poller = new JobPoller(_presenter, _jobRepository, _worker);
+            var poller = new JobPoller(_presenter, _locator, _worker);
 
             if (_worker.CurrentJob != Guid.Empty)
             {
                 // start working on the job
-                _presenter.CurrentJob = JobFactory.CreateJob(_jobRepository.GetCurrentJob(_worker.Id), _worker);
+                _presenter.CurrentJob = JobFactory.CreateJob(_jobRepository.GetCurrentJob(_worker.Id), _worker, _locator);
             }
 
             poller.Start();

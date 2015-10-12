@@ -10,6 +10,13 @@ namespace WebApp
 {
     public class Configuration
     {
+        private static readonly Configuration _configuration = new Configuration();
+
+        public static Configuration Current()
+        {
+            return _configuration;
+        }
+
         private const string ConfigurationFileName = "C:\\proggr\\.proggrrc";
         private static ConfigurationData _data;
 

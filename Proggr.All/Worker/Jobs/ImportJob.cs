@@ -13,16 +13,10 @@ namespace Worker.Jobs
 
         private readonly ICodeLocationRepository _codeLocationRepository;
 
-        public ImportHistoryJob(JobDescriptor jobDescription, Guid workerId, IJobRepository jobRepository = null,
-            IApiDataRepository apiDataRepository = null) : this(jobDescription, workerId, jobRepository, apiDataRepository, null)
+        public ImportHistoryJob(JobDescriptor jobDescription, Guid workerId, ILocator locator) 
+            : base(jobDescription, workerId, locator)
         {
-
-        }
-
-        public ImportHistoryJob(JobDescriptor jobDescription, Guid workerId, IJobRepository jobRepository = null, IApiDataRepository apiDataRepository = null, ICodeLocationRepository codeLocationRepository = null) 
-            : base(jobDescription, workerId, jobRepository, apiDataRepository)
-        {
-            _codeLocationRepository = _codeLocationRepository ?? new CodeLocationRepository();
+            _codeLocationRepository = _serviceLocator.Locate<ICodeLocationRepository>();
         }
 
         public override async Task<JobResult> Run()

@@ -6,32 +6,26 @@ using Worker.Models;
 
 namespace Worker.Repositories
 {
-    public class CodeLocationRepository : ICodeLocationRepository
+    public class CodeLocationRepository : SimpleDataRepository, ICodeLocationRepository
     {
         private const string CloneRootSettingKey = "CloneJob:CloneRootPath";
-        private readonly dynamic _database;
-
-        public CodeLocationRepository()
-        {
-            _database = Database.OpenNamedConnection("DefaultConnection");
-        }
 
         public CodeLocation GetCodeLocation(Guid codelocationId)
         {
-            return _database.CodeLocations.Get(codelocationId);
+            return Database.CodeLocations.Get(codelocationId);
         }
 
         public CodeLocation GetCodeLocation(string fullname)
         {
-            return _database.CodeLocations.FindAllBy(FullName: fullname).FirstOrDefault();
+            return Database.CodeLocations.FindAllBy(FullName: fullname).FirstOrDefault();
         }
 
-        public CodeLocation CreateCodeLocation(string fullname, string name)
+        public CodeLocation CreateCodeLocation(string fullname, string name, string createdBy, bool isPublic = false)
         {
             var codelocation = GetCodeLocation(fullname);
             if (codelocation == null)
             {
-                codelocation = (CodeLocation)_database.CodeLocations.Insert(FullName: fullname, Name: name);
+                codelocation = (CodeLocation)Database.CodeLocations.Insert(FullName: fullname, Name: name, CreatedBy: createdBy, IsPublic: isPublic);
                 if (codelocation == null)
                 {
                     return GetCodeLocation(fullname);
@@ -54,7 +48,7 @@ namespace Worker.Repositories
         public CommitData AddCommit(CommitData newCommit, CodeLocation codeLocation)
         {
             newCommit.RepositoryId = codeLocation.Id;
-            return _database.Commits.Insert(newCommit);
+            return Database.Commits.Insert(newCommit);
         }
     }
 }

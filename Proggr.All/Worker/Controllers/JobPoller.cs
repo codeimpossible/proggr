@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,13 +22,16 @@ namespace Worker.Controllers
         private readonly IJobRepository _jobRepository;
         private readonly WorkerState _worker;
 
-        public JobPoller(WorkloadPresenter presenter, IJobRepository jobRepository, WorkerState worker, int? intervalSeconds = null)
+        private readonly ILocator _serviceLocator;
+
+        public JobPoller(WorkloadPresenter presenter, ILocator locator, WorkerState worker, int? intervalSeconds = null)
         {
             _interval = intervalSeconds ?? _interval;
 
             _presenter = presenter;
-            _jobRepository = jobRepository;
+            _jobRepository = locator.Locate<IJobRepository>();
             _worker = worker;
+            _serviceLocator = locator;
         }
 
         public void Start()
@@ -53,7 +57,7 @@ namespace Worker.Controllers
                         _worker.CurrentJob = desc.Id;
 
                         // TODO: change this so that it happens automatically when CurrentJob is set on the workerstate
-                        _presenter.CurrentJob = JobFactory.CreateJob(desc, _worker);
+                        _presenter.CurrentJob = JobFactory.CreateJob(desc, _worker, _serviceLocator);
                     }
                 }
 

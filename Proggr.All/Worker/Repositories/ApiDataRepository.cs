@@ -7,18 +7,11 @@ using Simple.Data;
 
 namespace Worker.Repositories
 {
-    public class ApiDataRepository : IApiDataRepository
+    public class ApiDataRepository : SimpleDataRepository, IApiDataRepository
     {
-        private readonly dynamic _database;
-
-        public ApiDataRepository()
-        {
-            _database = Database.OpenNamedConnection("DefaultConnection");
-        }
-
         public string GetUserToken(string username)
         {
-            var result = _database.GithubJsonData.FindAllByGithubUserName(GithubUserName: username).FirstOrDefault();
+            var result = Database.GithubJsonData.FindAllByGithubUserName(GithubUserName: username).FirstOrDefault();
             return result == null ? null : result.ApiToken;
         }
     }

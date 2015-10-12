@@ -7,7 +7,7 @@ namespace Worker.Repositories
     {
         CodeLocation GetCodeLocation(Guid codelocationId);
         CodeLocation GetCodeLocation(string fullname);
-        CodeLocation CreateCodeLocation(string fullname, string name);
+        CodeLocation CreateCodeLocation(string fullname, string name, string createdBy, bool isPublic = false);
         bool HasCodeLocationLocally(string fullname);
         string GetCodeLocationLocalPath(string fullname);
 

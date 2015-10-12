@@ -29,15 +29,10 @@ namespace Worker.Jobs
     {
         private readonly ICodeLocationRepository _codeLocationRepository;
 
-        public CloneJob(JobDescriptor jobDescription, Guid workerId, IJobRepository jobRepository = null,
-            IApiDataRepository apiDataRepository = null) : this(jobDescription, workerId, jobRepository, apiDataRepository, null)
+        public CloneJob(JobDescriptor jobDescription, Guid workerId, ILocator locator) : 
+            base(jobDescription, workerId, locator)
         {
-            
-        }
-        public CloneJob(JobDescriptor jobDescription, Guid workerId, IJobRepository jobRepository = null, IApiDataRepository apiDataRepository = null, ICodeLocationRepository codeLocationRepository = null) : 
-            base(jobDescription, workerId, jobRepository, apiDataRepository)
-        {
-            _codeLocationRepository = _codeLocationRepository ?? new CodeLocationRepository();
+            _codeLocationRepository = _serviceLocator.Locate<ICodeLocationRepository>();
         }
 
         public override async Task<JobResult> Run()
@@ -63,7 +58,7 @@ namespace Worker.Jobs
                     var result = Repository.Clone(args.Url, clonePathAbs, options);
                     
                     // create an entry for the repository in our db, so we can link commits to it
-                    var codelocation = _codeLocationRepository.CreateCodeLocation(fullname, args.RepoName);
+                    var codelocation = _codeLocationRepository.CreateCodeLocation(fullname, args.RepoName, args.Username);
 
                     // schedule an import
                     _jobRepository.ScheduleJob<ImportHistoryJob>(codelocation);

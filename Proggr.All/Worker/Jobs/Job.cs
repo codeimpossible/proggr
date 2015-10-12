@@ -20,10 +20,13 @@ namespace Worker.Jobs
         protected readonly IApiDataRepository _apiRepository;
         protected readonly JobDescriptor _jobDescription;
 
-        public Job(JobDescriptor jobDescription, Guid workerId, IJobRepository jobRepository = null, IApiDataRepository apiDataRepository = null)
+        protected readonly ILocator _serviceLocator;
+
+        public Job(JobDescriptor jobDescription, Guid workerId, ILocator locator)
         {
-            _jobRepository = jobRepository ?? new JobRepository();
-            _apiRepository = apiDataRepository ?? new ApiDataRepository();
+            _serviceLocator = locator;
+            _jobRepository = locator.Locate<IJobRepository>();
+            _apiRepository = locator.Locate<IApiDataRepository>();
 
             Id = jobDescription.Id;
             WorkerId = workerId;
