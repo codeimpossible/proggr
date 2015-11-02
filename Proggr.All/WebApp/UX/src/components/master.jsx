@@ -8,7 +8,7 @@ import {Wait} from './wait';
 
 let RouteHandler = Router.RouteHandler;
 
-class Master extends React.Component {
+export default class Master extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -33,7 +33,7 @@ class Master extends React.Component {
         <div className="col-md-12 content container">
           <Sidebar currentUser={this.state.currentUser} />
           <div className="col-md-9">
-            <RouteHandler />
+            {this.props.children}
           </div>
         </div>
       </div>
@@ -44,5 +44,3 @@ class Master extends React.Component {
 Master.contextTypes = {
   router: React.PropTypes.func,
 };
-
-exports.Master = Master;

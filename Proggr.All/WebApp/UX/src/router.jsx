@@ -1,21 +1,23 @@
 ﻿import React from 'react';
-import {Route, HashLocation, default as Router} from 'react-router';
-import {Profile} from './components/sections/profile';
-import {Home} from './components/sections/home';
-import {Master} from './components/master';
+import {Route, HashLocation, Router} from 'react-router';
+import Profile from './components/sections/profile';
+import AdminIndex from './concerns/admin';
+import JobsIndex from './concerns/admin/jobs';
+import WelcomeIndex from './concerns/welcome';
+import Master from './components/master';
 
-export class AppRouter {
-  static initializeRoutes() {
-    // declare our routes and their hierarchy
-    const routes = (
-      <Route handler={Master}>
-        <Route name="/" handler={Home}/>
-        <Route name="profile" handler={Profile}/>
-      </Route>
-    );
-
-    Router.run(routes, HashLocation, (Root) => {
-      React.render(<Root/>, document.body);
-    });
+export default class AppRouter {
+  static initializeApplicationRoutes() {
+    React.render((
+      <Router>
+        <Route path="/" component={Master}>
+          <Route path="welcome" component={WelcomeIndex} />
+          <Route path="profile" component={Profile} />
+          <Route path="admin" component={AdminIndex}>
+            <Route path="jobs" component={JobsIndex} />
+          </Route>
+        </Route>
+      </Router>
+    ), document.body);
   }
 }
