@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 using Newtonsoft.Json;
+using Worker.Controllers;
 using Worker.Models;
 using Worker.Repositories;
 
@@ -28,11 +29,13 @@ namespace Worker.Jobs
     public class CloneJob : Job
     {
         private readonly ICodeLocationRepository _codeLocationRepository;
+        private readonly IRepositoryController _repositoryController;
 
         public CloneJob(JobDescriptor jobDescription, Guid workerId, ILocator locator) : 
             base(jobDescription, workerId, locator)
         {
             _codeLocationRepository = _serviceLocator.Locate<ICodeLocationRepository>();
+            _repositoryController = _serviceLocator.Locate<IRepositoryController>();
         }
 
         public override async Task<JobResult> Run()
@@ -55,10 +58,13 @@ namespace Worker.Jobs
                 };
                 try
                 {
-                    var result = Repository.Clone(args.Url, clonePathAbs, options);
+                    var result = _repositoryController.Clone(args.Url, clonePathAbs, options);
                     
                     // create an entry for the repository in our db, so we can link commits to it
                     var codelocation = _codeLocationRepository.CreateCodeLocation(fullname, args.RepoName, args.Username);
+
+                    // let other workers know that this worker has this code location
+                    _codeLocationRepository.RecordCodeLocationOnWorker(WorkerId, codelocation.Id);
 
                     // schedule an import
                     _jobRepository.ScheduleJob<ImportHistoryJob>(codelocation);

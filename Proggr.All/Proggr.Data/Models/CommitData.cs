@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Worker.Models
+namespace Proggr.Data.Models
 {
     public class CommitData
     {

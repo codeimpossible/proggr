@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using log4net;
 using LibGit2Sharp;
+using Proggr.Data.Models;
 using Worker.Models;
 using Worker.Repositories;
 
@@ -18,6 +21,16 @@ namespace Worker.Jobs
         {
             _codeLocationRepository = _serviceLocator.Locate<ICodeLocationRepository>();
         }
+
+        private List<T>[] ToChunks<T>(List<T> list, int maxChunkSize)
+        {
+            return list
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / maxChunkSize)
+                .Select(x => x.Select(v => v.Value).ToList())
+                .ToArray();
+        }
+
 
         public override async Task<JobResult> Run()
         {
@@ -61,6 +74,19 @@ namespace Worker.Jobs
                     _logger.Info($"{count} commits imported in {duration}ms");
 
                     _jobRepository.CompleteJob(Id, WorkerId, new { NumCommits = count, Duration = duration });
+
+                    // break the list of commits into chunks, no bigger than 512 commits in length
+                    // then create a DetectAndHashJob for each chunk.
+                    var chunks = ToChunks(repo.Commits.Select(c => c.Sha).ToList(), DetectAndHashJob.MAX_NUMBER_OF_SHAS_TO_PROCESS);
+                    Parallel.ForEach(chunks, (chunk) =>
+                    {
+                        // create a DetectAndHashJob for this chunk
+                        _jobRepository.ScheduleJob<DetectAndHashJob>(new DetectAndHashJobArgs()
+                        {
+                            RepositoryId = args.Id,
+                            Shas = chunk
+                        });
+                    });
 
                     return Task.FromResult<JobResult>(new JobSuccessResult(this));
                 }

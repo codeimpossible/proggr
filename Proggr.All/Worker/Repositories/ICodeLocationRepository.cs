@@ -1,5 +1,5 @@
 ﻿using System;
-using Worker.Models;
+using Proggr.Data.Models;
 
 namespace Worker.Repositories
 {
@@ -12,5 +12,9 @@ namespace Worker.Repositories
         string GetCodeLocationLocalPath(string fullname);
 
         CommitData AddCommit(CommitData newCommit, CodeLocation codeLocation);
+
+
+        // TODO: probably find a better repository for these methods to live in
+        bool RecordCodeLocationOnWorker(Guid workerId, Guid codelocationId);
     }
 }

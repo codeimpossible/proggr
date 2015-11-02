@@ -2,7 +2,8 @@
 using System.Configuration;
 using System.IO;
 using Simple.Data;
-using Worker.Models;
+using Proggr.Data.Models;
+using Proggr.Data;
 
 namespace Worker.Repositories
 {
@@ -26,6 +27,7 @@ namespace Worker.Repositories
             if (codelocation == null)
             {
                 codelocation = (CodeLocation)Database.CodeLocations.Insert(FullName: fullname, Name: name, CreatedBy: createdBy, IsPublic: isPublic);
+
                 if (codelocation == null)
                 {
                     return GetCodeLocation(fullname);
@@ -49,6 +51,20 @@ namespace Worker.Repositories
         {
             newCommit.RepositoryId = codeLocation.Id;
             return Database.Commits.Insert(newCommit);
+        }
+
+        public bool RecordCodeLocationOnWorker(Guid workerId, Guid codelocationId)
+        {
+            var record =
+                Database.WorkerCodeLocations.FindAllByWorkerIdAndCodeLocationId(WorkerId: workerId,
+                    CodeLocationId: codelocationId).FirstOrDefault();
+            if (!record)
+            {
+                var result = Database.WorkerCodeLocations.Insert(WorkerId: workerId,
+                    CodeLocationId: codelocationId);
+                return result != null;
+            }
+            return true;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Proggr.Data;
 using Worker.Jobs;
 using Worker.Models;
 

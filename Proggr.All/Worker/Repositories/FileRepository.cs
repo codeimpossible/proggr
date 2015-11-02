@@ -1,5 +1,5 @@
-﻿using LibGit2Sharp;
-using Worker.Models;
+﻿using Proggr.Data;
+using Proggr.Data.Models;
 
 namespace Worker.Repositories
 {

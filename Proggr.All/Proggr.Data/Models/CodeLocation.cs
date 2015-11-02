@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Worker.Models
+namespace Proggr.Data.Models
 {
     public class CodeLocation
     {

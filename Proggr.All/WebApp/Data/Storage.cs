@@ -10,15 +10,12 @@ using Encryptamajig;
 using Octokit;
 using Simple.Data;
 using Newtonsoft.Json;
+using Proggr.Data;
 
 namespace WebApp.Data
 {
     public static class Storage
     {
-        public const string APIDATA_KEY_APITOKEN = "ApiToken";
-        public const string APIDATA_KEY_USER = "User";
-        public const string APIDATA_KEY_REPOSITORIES = "Repositories";
-
         public static dynamic Current()
         {
             // TODO: i think HttpContext.Current.Cache is better...

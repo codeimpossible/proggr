@@ -1,4 +1,4 @@
-﻿namespace Worker.Repositories
+﻿namespace Proggr.Data
 {
     public class SimpleDataRepository
     {

@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using WebApp.Areas.Api.Filters;
+using WebApp.Areas.Api.Models;
+using WebApp.Data;
 
 namespace WebApp.Areas.Api.Controllers
 {
     public class JobsController : Controller
     {
-        [Worker]
+        [Authorize]
         public ActionResult Index()
         {
-            return Json(null, JsonRequestBehavior.AllowGet);
+            var db = Storage.Current();
+
+            // get all jobs that have not finished, or have finished in the last hour
+            List<JobApiModel> jobs = db.Jobs.FindAll(db.Jobs.DateCompleted == null || db.Jobs.DateCompleted < DateTime.UtcNow.AddHours(-1.0));
+            return Json(jobs, JsonRequestBehavior.AllowGet);
         }
     }
 }

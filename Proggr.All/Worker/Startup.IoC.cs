@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Worker.Controllers;
 using Worker.Repositories;
 
 namespace Worker
@@ -16,6 +12,7 @@ namespace Worker
             registry.Register<IJobRepository>(new JobRepository());
             registry.Register<IWorkerRepository>(new WorkerRepository());
             registry.Register<IFileRepository>(new FileRepository());
+            registry.Register<IRepositoryController>(new RepositoryController());
         }
     }
 }

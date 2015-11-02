@@ -10,6 +10,7 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using Owin.Security.Providers.GitHub;
 using Owin;
+using Proggr.Data;
 using Simple.Data;
 using WebApp.Data;
 using WebApp.Models;
@@ -73,7 +74,7 @@ namespace WebApp
                     {
                         try
                         {
-                            Storage.StoreApiData(context.UserName, Storage.APIDATA_KEY_APITOKEN, context.AccessToken);
+                            Storage.StoreApiData(context.UserName, ApiStorageConstants.APIDATA_KEY_APITOKEN, context.AccessToken);
                             // TODO: prefetch some data?
                         }
                         catch (Exception e)

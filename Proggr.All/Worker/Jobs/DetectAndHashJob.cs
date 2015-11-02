@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using LibGit2Sharp;
+using Proggr.Data.Models;
 using Proggr.LangDetect.Detectors;
 using Worker.Controllers;
 using Worker.Models;
@@ -22,19 +22,21 @@ namespace Worker.Jobs
 
     public class DetectAndHashJob : Job, IJob
     {
+        public const int MAX_NUMBER_OF_SHAS_TO_PROCESS = 512;
+
         private readonly ExtensionDetector _extDectector = new ExtensionDetector();
 
         private readonly ICodeLocationRepository _codeLocationRepository;
         private readonly IFileRepository _fileRepository;
+        private readonly IRepositoryController _repositoryController;
 
         public DetectAndHashJob(JobDescriptor jobDescription, Guid workerId, ILocator locator) : 
             base(jobDescription, workerId, locator)
         {
             _codeLocationRepository = _serviceLocator.Locate<ICodeLocationRepository>();
             _fileRepository = _serviceLocator.Locate<IFileRepository>();
+            _repositoryController = _serviceLocator.Locate<IRepositoryController>();
         }
-
-        public JobDescriptor JobDescriptor { get; }
 
         public override async Task<JobResult> Run()
         {
@@ -49,7 +51,7 @@ namespace Worker.Jobs
 
                     Parallel.ForEach(args.Shas, async (sha) =>
                     {
-                        var commit = await RepositoryController.GetCommit(repo, sha);
+                        var commit = await _repositoryController.GetCommit(repo, sha);
                         var patch = await CommitController.GetChangeSet(repo, commit);
 
                         Parallel.ForEach(patch, (change) =>
@@ -101,7 +103,6 @@ namespace Worker.Jobs
                         });
                         // get the files that changed in this commit
                     });
-
 
                     return Task.FromResult<JobResult>(new JobSuccessResult(this));
                 }

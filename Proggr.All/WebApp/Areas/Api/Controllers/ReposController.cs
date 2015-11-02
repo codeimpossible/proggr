@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Octokit;
 using WebApp.Areas.Api.Models;
 using WebApp.Data;
+using Proggr.Data;
+using Proggr.Data.Models;
 
 namespace WebApp.Areas.Api.Controllers
 {
@@ -17,7 +15,7 @@ namespace WebApp.Areas.Api.Controllers
         public ActionResult Index()
         {
             var db = Storage.Current();
-            var userRepos = Storage.GetApiData<List<Repository>>(User.Identity.Name, Storage.APIDATA_KEY_REPOSITORIES)
+            var userRepos = Storage.GetApiData<List<GithubApiRepository>>(User.Identity.Name, ApiStorageConstants.APIDATA_KEY_REPOSITORIES)
                 .SelectMany(r => r.FullName).ToArray();
 
 

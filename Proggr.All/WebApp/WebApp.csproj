@@ -210,10 +210,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="Areas\Api\ApiAreaRegistration.cs" />
+    <Compile Include="Areas\Api\Controllers\EmailAddressesController.cs" />
     <Compile Include="Areas\Api\Controllers\JobsController.cs" />
     <Compile Include="Areas\Api\Controllers\ReposController.cs" />
     <Compile Include="Areas\Api\Filters\Worker.cs" />
+    <Compile Include="Areas\Api\Models\JobApiModel.cs" />
     <Compile Include="Areas\Api\Models\NewApiRepo.cs" />
+    <Compile Include="Areas\Api\Models\UserEmailAddressMatch.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -347,6 +350,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Api\Views\EmailAddresses\" />
     <Folder Include="Areas\Api\Views\Jobs\" />
     <Folder Include="Areas\Api\Views\Repos\" />
     <Folder Include="Areas\Api\Views\Shared\" />
@@ -357,6 +361,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <Content Include="UX\package.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Proggr.Data\Proggr.Data.csproj">
+      <Project>{9f554fa0-a342-4866-b114-e0f4ab15fe6c}</Project>
+      <Name>Proggr.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

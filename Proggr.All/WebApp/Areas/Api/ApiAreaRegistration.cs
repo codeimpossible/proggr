@@ -21,6 +21,12 @@ namespace WebApp.Areas.Api
             );
 
             context.MapRoute(
+                name: "EmailAddressesApi",
+                url: "api/emailaddresses/{action}",
+                defaults: new { controller = "EmailAddresses", action = "Index" }
+            );
+
+            context.MapRoute(
                 "Api_default",
                 "api/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }

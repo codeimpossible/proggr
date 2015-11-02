@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\CommitController.cs" />
+    <Compile Include="Controllers\IRepositoryController.cs" />
     <Compile Include="Controllers\JobPoller.cs" />
     <Compile Include="Controllers\RepositoryController.cs" />
     <Compile Include="Controllers\WorkerRegistrationController.cs" />
@@ -108,10 +109,8 @@
     <Compile Include="Jobs\CloneJob.cs" />
     <Compile Include="Jobs\IJob.cs" />
     <Compile Include="Jobs\JobFactory.cs" />
+    <Compile Include="Jobs\UpdateUserCodeLocationsJob.cs" />
     <Compile Include="Locator.cs" />
-    <Compile Include="Models\CodeLocation.cs" />
-    <Compile Include="Models\CommitData.cs" />
-    <Compile Include="Models\File.cs" />
     <Compile Include="Models\JobResults.cs" />
     <Compile Include="Models\WorkerState.cs" />
     <Compile Include="Models\JobDescriptor.cs" />
@@ -124,7 +123,6 @@
     <Compile Include="Repositories\IJobRepository.cs" />
     <Compile Include="Repositories\IWorkerRepository.cs" />
     <Compile Include="Repositories\JobRepository.cs" />
-    <Compile Include="Repositories\SimpleDataRepository.cs" />
     <Compile Include="Repositories\WorkerRepository.cs" />
     <Compile Include="Startup.IoC.cs" />
     <Compile Include="Views\WorkloadView.cs">
@@ -164,6 +162,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Proggr.Data\Proggr.Data.csproj">
+      <Project>{9f554fa0-a342-4866-b114-e0f4ab15fe6c}</Project>
+      <Name>Proggr.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Proggr.LangDetect\Proggr.LangDetect.csproj">
       <Project>{34325A7D-D481-4B00-A46D-50674239B859}</Project>
       <Name>Proggr.LangDetect</Name>
