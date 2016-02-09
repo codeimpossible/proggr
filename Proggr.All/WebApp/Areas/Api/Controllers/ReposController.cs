@@ -15,13 +15,13 @@ namespace WebApp.Areas.Api.Controllers
         public ActionResult Index()
         {
             var db = Storage.Current();
-            var userRepos = Storage.GetApiData<List<GithubApiRepository>>(User.Identity.Name, ApiStorageConstants.APIDATA_KEY_REPOSITORIES)
-                .SelectMany(r => r.FullName).ToArray();
+            var dbRepos = Storage.GetApiData<List<GithubApiRepository>>(User.Identity.Name, ApiStorageConstants.APIDATA_KEY_REPOSITORIES);
+            var userRepos = dbRepos.Select(r => r.FullName).ToArray();
 
 
             // get the users repositories that are being tracked in the system, plus any public repositories
             var visibleRepos =
-                db.CodeLocations.FindAll(db.CodeLocations.FullName == userRepos || db.CodeLocations.IsPublic);
+                db.CodeLocations.FindAll(db.CodeLocations.FullName == userRepos || db.CodeLocations.IsPublic == true);
 
             return Json(visibleRepos, JsonRequestBehavior.AllowGet);
         }
