@@ -41,7 +41,9 @@ namespace Worker.Jobs
         public override async Task<JobResult> Run()
         {
             var args = JobDescriptor.GetArgumentsJson<CloneJobArgs>();
-            var fullname = args.Url.Replace("https://github.com/", "").Replace(".git", "");
+            var fullname = args.Url.Replace("https://github.com/", "")
+                                    .Replace("http://github.com/", "")
+                                    .Replace(".git", "");
             var clonePathAbs = _codeLocationRepository.GetCodeLocationLocalPath(fullname);
             return await Task.Run(() =>
             {
