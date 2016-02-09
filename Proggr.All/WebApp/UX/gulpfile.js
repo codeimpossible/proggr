@@ -56,7 +56,14 @@ gulp.task('webpack:server', function (callback) {
   var config = Object.create(webpackConfig);
   config.devtool = 'eval';
   config.debug = true;
+
+  // tell webpack that we will reload the page ourselves if a HMR update fails
+  // read more about this: https://webpack.github.io/docs/hot-module-replacement-with-webpack.html#what-can-i-do-with-it
   config.entry.unshift('webpack/hot/only-dev-server');
+
+  // this tells webpack to include the webpack devserver client in the
+  // pack and points it to our devserver url
+  // read more here: https://webpack.github.io/docs/webpack-dev-server.html#inline-mode
   config.entry.unshift('webpack-dev-server/client?http://localhost:9090');
 
   // Start a webpack-dev-server
