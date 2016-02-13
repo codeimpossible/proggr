@@ -2,6 +2,12 @@
 
 Is a open-source software developer analytics website built on top of the Asp.net MVC framework. Just add your github account and watch Proggr tell you interesting things!
 
+
+## Worker/WebApp relation to database
+Workers are meant to be read-light, write-heavy to the database, where the website is meant to be read-heavy, write-light to the database. Which is why the workers don't send all their data through the website API. The website API is meant to be used by the front-end application or other non-worker clients.
+
+
+
 ## License
 
 This project is licensed under the [BSD 3-clause license](./LICENSE). For more information, [read about the BSD 3-clause license on choosealicense.org](http://choosealicense.com/licenses/bsd-3-clause/).

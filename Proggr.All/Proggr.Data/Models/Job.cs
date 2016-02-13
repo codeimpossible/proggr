@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApp.Areas.Api.Models
+namespace Proggr.Data.Models
 {
-    public class JobApiModel
+    public class Job
     {
         public Guid Id { get; set; }
         public string Status { get; set; }

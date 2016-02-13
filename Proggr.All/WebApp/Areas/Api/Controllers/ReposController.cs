@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -22,28 +23,34 @@ namespace WebApp.Areas.Api.Controllers
 
         public ActionResult Index()
         {
-            var db = Database.Open(); // Storage.CreateConnection();
+            var db = Storage.CreateConnection();
             var dbRepos = _githubApiDataCache.GetApiData<List<GithubApiRepository>>(User.Identity.Name, ApiStorageConstants.APIDATA_KEY_REPOSITORIES);
             var userRepos = dbRepos.Select(r => r.FullName).ToArray();
 
 
             // get the users repositories that are being tracked in the system, plus any public repositories
             var visibleRepos =
-                (List<GithubApiRepository>)db.CodeLocations.FindAll(db.CodeLocations.FullName == userRepos || db.CodeLocations.IsPublic == true);
+                (List<CodeLocation>)db.CodeLocations.FindAll(db.CodeLocations.FullName == userRepos || db.CodeLocations.IsPublic == true);
 
             return Json(visibleRepos, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult Create(NewApiRepo newRepo)
+        public ActionResult Create(CodeLocation newCodeLocation)
         {
+            if (newCodeLocation.Id != Guid.Empty)
+            {
+                Response.StatusCode = (int) HttpStatusCode.PreconditionFailed;
+                return Json(new PreconditionFailedException() { Message = "Id cannot have a value when creating a CodeLocation" });
+            }
+            
             var db = Storage.CreateConnection();
 
-            var repo = db.CodeLocations.Insert(newRepo);
+            var codeLocation = (CodeLocation)db.CodeLocations.Insert(newCodeLocation);
 
             Response.StatusCode = (int)HttpStatusCode.Created;
 
-            return Json(repo);
+            return Json(codeLocation);
         }
     }
 }

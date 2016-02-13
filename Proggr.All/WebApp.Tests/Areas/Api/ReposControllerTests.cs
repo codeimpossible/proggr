@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using Moq;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ using Should;
 using Simple.Data;
 using Simple.Data.Mocking;
 using WebApp.Areas.Api.Controllers;
+using WebApp.Areas.Api.Models;
 using WebApp.Services;
 using WebApp.Tests.Fixtures;
 using Xunit;
@@ -28,6 +30,40 @@ namespace WebApp.Tests.Areas.Api
             _database = Database.Open();
 
             _harness = new ControllerHarness<ReposController>(new ReposController(_githubCache.Object));
+        }
+
+        public class TheCreateAction : ReposControllerTests
+        {
+            [Fact]
+            public void ShouldInsertARepoInTheDatabase()
+            {
+                var newRepo = CodeLocations.FakeNoId();
+                var result = _harness.Controller.Create(newRepo) as JsonResult;
+                var json = result.DeserializeData<CodeLocation>();
+
+                var repos = (List<GithubApiRepository>)_database.CodeLocations.All();
+
+                json.FullName.ShouldEqual(newRepo.FullName);
+                json.IsPublic.ShouldEqual(newRepo.IsPublic);
+                json.Name.ShouldEqual(newRepo.Name);
+                repos.Count.ShouldEqual(1);
+            }
+
+            [Fact]
+            public void WhenIdIsGiven_ShouldReturnAnError()
+            {
+                var newRepo = CodeLocations.Fake();
+                var result = _harness.Controller.Create(newRepo) as JsonResult;
+
+                var json = result.DeserializeData<PreconditionFailedException>();
+
+                var repos = (List<GithubApiRepository>)_database.CodeLocations.All();
+
+                _harness.Controller.Response.StatusCode.ShouldEqual((int)HttpStatusCode.PreconditionFailed);
+
+                repos.Count.ShouldEqual(0);
+                json.Message.ShouldEqual("Id cannot have a value when creating a CodeLocation");
+            }
         }
 
         public class TheIndexAction : ReposControllerTests
@@ -50,9 +86,9 @@ namespace WebApp.Tests.Areas.Api
 
                 var result = _harness.Controller.Index() as JsonResult;
 
-                var jsonResults = result.DeserializeData<List<GithubApiRepository>>();
+                var json = result.DeserializeData<List<CodeLocation>>();
 
-                jsonResults.Count.ShouldEqual(locations.Count);
+                json.Count.ShouldEqual(locations.Count);
             }
         }
     }

@@ -214,8 +214,7 @@
     <Compile Include="Areas\Api\Controllers\JobsController.cs" />
     <Compile Include="Areas\Api\Controllers\ReposController.cs" />
     <Compile Include="Areas\Api\Filters\Worker.cs" />
-    <Compile Include="Areas\Api\Models\JobApiModel.cs" />
-    <Compile Include="Areas\Api\Models\NewApiRepo.cs" />
+    <Compile Include="Areas\Api\Models\PreconditionFailedException.cs" />
     <Compile Include="Areas\Api\Models\UserEmailAddressMatch.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />

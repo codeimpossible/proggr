@@ -12,6 +12,8 @@ namespace WebApp.Tests
         private readonly Mock<IPrincipal> _principal = new Mock<IPrincipal>();
         private readonly Mock<HttpContextBase> _httpContext = new Mock<HttpContextBase>();
         private readonly Mock<ControllerContext> _controllerContext = new Mock<ControllerContext>();
+        private readonly Mock<HttpResponseBase> _response = new Mock<HttpResponseBase>();
+        private readonly Mock<HttpRequestBase> _request = new Mock<HttpRequestBase>();
 
         public ControllerHarness(CONTROLLER controller)
         {
@@ -19,8 +21,13 @@ namespace WebApp.Tests
 
             _principal.Setup(p => p.Identity).Returns(_identity.Object);
             _httpContext.Setup(h => h.User).Returns(_principal.Object);
+            _httpContext.Setup(http => http.Request).Returns(_request.Object);
+            _httpContext.Setup(http => http.Response).Returns(_response.Object);
             _controllerContext.Setup(c => c.HttpContext).Returns(_httpContext.Object);
 
+            _request.SetupAllProperties();
+            _response.SetupAllProperties();
+            
             Controller.ControllerContext = _controllerContext.Object;
         }
 

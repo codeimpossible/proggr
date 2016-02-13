@@ -9,6 +9,13 @@ namespace WebApp.Tests.Fixtures
 {
     public static class CodeLocations
     {
+        public static CodeLocation FakeNoId()
+        {
+            var codeLocation = Fake();
+            codeLocation.Id = Guid.Empty;
+            return codeLocation;
+        }
+
         public static CodeLocation Fake()
         {
             var projectName = Faker.Internet.UserName();
