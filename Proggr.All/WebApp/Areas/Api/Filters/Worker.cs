@@ -16,7 +16,9 @@ namespace WebApp.Areas.Api.Filters
             var httpContext = filterContext.HttpContext;
             var useragent = httpContext.Request.UserAgent;
             var workerId = httpContext.Request.Headers["X-Proggr-Worker-Id"];
-            var worker = Storage.Current().Workers.Get(workerId);
+
+            var db = Storage.CreateConnection();
+            var worker = db.Workers.Get(workerId);
 
             if (useragent != workerUserAgent || String.IsNullOrWhiteSpace(workerId) || worker == null)
             {

@@ -15,11 +15,18 @@ using Simple.Data;
 using WebApp.Data;
 using WebApp.Models;
 using WebApp.Providers;
+using WebApp.Services;
 
 namespace WebApp
 {
     public partial class Startup
     {
+        private readonly IGithubApiDataCacheService _apiDataCacheService;
+        public Startup(IGithubApiDataCacheService apiDataCacheService = null)
+        {
+            _apiDataCacheService = apiDataCacheService ?? new GithubApiDataCacheService();
+        }
+
         static Startup()
         {
             PublicClientId = "web";
@@ -74,7 +81,7 @@ namespace WebApp
                     {
                         try
                         {
-                            Storage.StoreApiData(context.UserName, ApiStorageConstants.APIDATA_KEY_APITOKEN, context.AccessToken);
+                            _apiDataCacheService.StoreApiData(context.UserName, ApiStorageConstants.APIDATA_KEY_APITOKEN, context.AccessToken);
                             // TODO: prefetch some data?
                         }
                         catch (Exception e)

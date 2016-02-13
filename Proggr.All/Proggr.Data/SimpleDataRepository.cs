@@ -1,8 +1,8 @@
 ﻿namespace Proggr.Data
 {
-    public class SimpleDataRepository
+    public abstract class SimpleDataRepository
     {
-        public SimpleDataRepository()
+        protected SimpleDataRepository()
         {
             Database = Simple.Data.Database.OpenNamedConnection("DefaultConnection");
         }

@@ -9,16 +9,23 @@ using Octokit;
 using Proggr.Data;
 using WebApp.Areas.Api.Filters;
 using WebApp.Data;
+using WebApp.Services;
 
 namespace WebApp.Areas.Api.Controllers
 {
     [Authorize]
     public class CurrentUserController : Controller
     {
+        private readonly IGithubApiDataCacheService _apiDataCacheService;
+        public CurrentUserController(IGithubApiDataCacheService apiDataCacheService = null)
+        {
+            _apiDataCacheService = apiDataCacheService ?? new GithubApiDataCacheService();
+        }
+
         public async Task<ActionResult> Index()
         {
             var currentUserName = User.Identity.Name;
-            var userJson = Storage.GetApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_USER);
+            var userJson = _apiDataCacheService.GetApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_USER);
 
             if (userJson == null)
             {
@@ -26,7 +33,7 @@ namespace WebApp.Areas.Api.Controllers
                 var client = CreateClient();
                 var user = await client.User.Current();
 
-                Storage.StoreApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_USER, user);
+                _apiDataCacheService.StoreApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_USER, user);
 
                 return Json(User, JsonRequestBehavior.AllowGet);
             }
@@ -43,7 +50,7 @@ namespace WebApp.Areas.Api.Controllers
             var repos = await client.Repository.GetAllForCurrent();
 
             // store the repos back into the github table
-            Storage.StoreApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_REPOSITORIES, repos);
+            _apiDataCacheService.StoreApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_REPOSITORIES, repos);
 
             return Json(repos, JsonRequestBehavior.AllowGet);
         }
@@ -51,7 +58,7 @@ namespace WebApp.Areas.Api.Controllers
         private GitHubClient CreateClient()
         {
             var currentUserName = User.Identity.Name;
-            var token = Storage.GetApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_APITOKEN);
+            var token = _apiDataCacheService.GetApiData(currentUserName, ApiStorageConstants.APIDATA_KEY_APITOKEN);
             if (token == null) return null;
             return new GitHubClient(new ProductHeaderValue("proggr")) {Credentials = new Credentials(token)};
         }
