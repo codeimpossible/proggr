@@ -7,7 +7,7 @@ using Proggr.Data.Models;
 
 namespace WebApp.Tests.Fixtures
 {
-    public static class CodeLocations
+    public static class CodeLocationFixture
     {
         public static CodeLocation FakeNoId()
         {

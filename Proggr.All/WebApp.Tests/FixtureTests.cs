@@ -24,7 +24,7 @@ namespace WebApp.Tests
         [Fact]
         public void FixturesShouldGetInserted()
         {
-            FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocations.Fake);
+            FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocationFixture.Fake);
             var locations = _database.CodeLocations.All();
             Assert.Equal(10, locations.Count());
         }
@@ -32,12 +32,12 @@ namespace WebApp.Tests
         [Fact]
         public void FixturesShouldBeQueryable()
         {
-            FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocations.Fake);
+            FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocationFixture.Fake);
             FixturesHelper.StoreFakes((location) =>
             {
                 location.IsPublic = true;
                 _database.CodeLocations.Insert(location);
-            }, 3, CodeLocations.Fake);
+            }, 3, CodeLocationFixture.Fake);
 
             var privateLocations = _database.CodeLocations.FindAllBy(IsPublic: false);
             var publicLocations = _database.CodeLocations.FindAllBy(IsPublic: true);
@@ -49,12 +49,12 @@ namespace WebApp.Tests
         [Fact]
         public void FixturesShouldBeQueryableUsingAnInQuery()
         {
-            var privateModels = FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocations.Fake);
+            var privateModels = FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocationFixture.Fake);
             var publicModels = FixturesHelper.StoreFakes((location) =>
             {
                 location.IsPublic = false;
                 _database.CodeLocations.Insert(location);
-            }, 3, CodeLocations.Fake);
+            }, 3, CodeLocationFixture.Fake);
 
             var publicNames = publicModels.Select(c => c.FullName).ToArray();
 

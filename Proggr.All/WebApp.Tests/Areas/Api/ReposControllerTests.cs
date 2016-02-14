@@ -37,7 +37,7 @@ namespace WebApp.Tests.Areas.Api
             [Fact]
             public void ShouldInsertARepoInTheDatabase()
             {
-                var newRepo = CodeLocations.FakeNoId();
+                var newRepo = CodeLocationFixture.FakeNoId();
                 var result = _harness.Controller.Create(newRepo) as JsonResult;
                 var json = result.DeserializeData<CodeLocation>();
 
@@ -52,7 +52,7 @@ namespace WebApp.Tests.Areas.Api
             [Fact]
             public void WhenIdIsGiven_ShouldReturnAnError()
             {
-                var newRepo = CodeLocations.Fake();
+                var newRepo = CodeLocationFixture.Fake();
                 var result = _harness.Controller.Create(newRepo) as JsonResult;
 
                 var json = result.DeserializeData<PreconditionFailedException>();
@@ -71,7 +71,7 @@ namespace WebApp.Tests.Areas.Api
             [Fact]
             public void ShouldReturnRepositories_ThatMatchCodeLocations()
             {
-                var locations = FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocations.Fake)
+                var locations = FixturesHelper.StoreFakes((location) => _database.CodeLocations.Insert(location), 10, CodeLocationFixture.Fake)
                     .Take(5)
                     .Select(l => new GithubApiRepository()
                     {

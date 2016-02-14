@@ -11,9 +11,9 @@ namespace Proggr.Data.Models
         public string Status { get; set; }
         public string Arguments { get; set; }
         public string JobType { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateUpdated { get; set; }
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCreated { get; set; }
+        public DateTime? DateUpdated { get; set; }
+        public DateTime? DateCompleted { get; set; }
         public string CompletedBy { get; set; }
         public string CompletedArguments { get; set; }
     }

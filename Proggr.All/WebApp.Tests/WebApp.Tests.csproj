@@ -114,12 +114,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Api\JobsControllerTests.cs" />
     <Compile Include="Areas\Api\ReposControllerTests.cs" />
     <Compile Include="ControllerHarness.cs" />
-    <Compile Include="Fixtures\CodeLocations.cs" />
+    <Compile Include="DateAndTimeExtensions.cs" />
+    <Compile Include="Fixtures\CodeLocationFixture.cs" />
     <Compile Include="Fixtures\FixturesHelper.cs" />
+    <Compile Include="Fixtures\JobFixture.cs" />
     <Compile Include="Fixtures\UserInformation.cs" />
     <Compile Include="FixtureTests.cs" />
+    <Compile Include="JobExtensions.cs" />
     <Compile Include="JsonResultExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
