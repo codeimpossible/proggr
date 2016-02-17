@@ -7,8 +7,8 @@ export class Nav extends React.Component {
   render() {
     let profileNav = this.props.currentUser ? (
       <Link to="/profile">
-        <img width="24" height="24" className="avatar" src={this.props.currentUser.AvatarUrl} />
-        {this.props.currentUser.Login}
+        <img width="24" height="24" className="avatar" src={this.props.currentUser.avatar_url} />
+        {this.props.currentUser.login}
       </Link>
     ) : (
       <Link to="/profile">
