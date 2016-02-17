@@ -12,7 +12,10 @@ namespace WebApp.Areas.Api.Controllers
     public class EmailAddressesController : Controller
     {
         private readonly IGithubApiDataCacheService _apiDataCacheService;
-        public EmailAddressesController(IGithubApiDataCacheService apiDataCacheService = null)
+
+        public EmailAddressesController() : this(null) { }
+
+        public EmailAddressesController(IGithubApiDataCacheService apiDataCacheService)
         {
             _apiDataCacheService = apiDataCacheService ?? new GithubApiDataCacheService();
         }

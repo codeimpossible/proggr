@@ -32,13 +32,13 @@ namespace WebApp.Tests.Areas.Api
             [Fact]
             public void ShouldReturnAListOfJobs()
             {
-                FixturesHelper.StoreFakes((job) => _database.Jobs.Insert(job), 11, JobFixture.CloneJob);
+                FixturesHelper.StoreFakes((job) => _database.Jobs.Insert(job), 5, JobFixture.CloneJob);
 
                 var result = _harness.Controller.Index() as JsonResult;
 
                 var jobs = result.DeserializeData<List<Job>>();
 
-                jobs.Count.ShouldEqual(11);
+                jobs.Count.ShouldEqual(5);
             }
 
             [Fact]

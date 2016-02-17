@@ -17,7 +17,10 @@ namespace WebApp.Areas.Api.Controllers
     public class CurrentUserController : Controller
     {
         private readonly IGithubApiDataCacheService _apiDataCacheService;
-        public CurrentUserController(IGithubApiDataCacheService apiDataCacheService = null)
+
+        public CurrentUserController() : this(null) { }
+
+        public CurrentUserController(IGithubApiDataCacheService apiDataCacheService)
         {
             _apiDataCacheService = apiDataCacheService ?? new GithubApiDataCacheService();
         }

@@ -16,7 +16,10 @@ namespace WebApp.Areas.Api.Controllers
     public class ReposController : Controller
     {
         private readonly IGithubApiDataCacheService _githubApiDataCache;
-        public ReposController(IGithubApiDataCacheService githubApiDataCache = null)
+
+        public ReposController() : this(null) { }
+
+        public ReposController(IGithubApiDataCacheService githubApiDataCache)
         {
             _githubApiDataCache = githubApiDataCache ?? new GithubApiDataCacheService();
         }

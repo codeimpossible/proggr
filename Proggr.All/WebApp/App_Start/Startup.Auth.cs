@@ -22,7 +22,10 @@ namespace WebApp
     public partial class Startup
     {
         private readonly IGithubApiDataCacheService _apiDataCacheService;
-        public Startup(IGithubApiDataCacheService apiDataCacheService = null)
+
+        public Startup() : this(null) { }
+
+        public Startup(IGithubApiDataCacheService apiDataCacheService)
         {
             _apiDataCacheService = apiDataCacheService ?? new GithubApiDataCacheService();
         }
